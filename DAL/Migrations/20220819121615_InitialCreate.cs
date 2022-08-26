@@ -35,6 +35,19 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WordGroups",
                 columns: table => new
                 {
@@ -53,8 +66,8 @@ namespace DAL.Migrations
                 {
                     WordId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ContentWar = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContentPol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InWarmian = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InPolish = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
                     PartOfSpeechId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -72,6 +85,30 @@ namespace DAL.Migrations
                         column: x => x.PartOfSpeechId,
                         principalTable: "PartOfSpeeches",
                         principalColumn: "PartOfSpeechId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserWordGroup",
+                columns: table => new
+                {
+                    UsersUserId = table.Column<int>(type: "int", nullable: false),
+                    WordGroupsWordGroupId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserWordGroup", x => new { x.UsersUserId, x.WordGroupsWordGroupId });
+                    table.ForeignKey(
+                        name: "FK_UserWordGroup_User_UsersUserId",
+                        column: x => x.UsersUserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserWordGroup_WordGroups_WordGroupsWordGroupId",
+                        column: x => x.WordGroupsWordGroupId,
+                        principalTable: "WordGroups",
+                        principalColumn: "WordGroupId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,6 +136,11 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserWordGroup_WordGroupsWordGroupId",
+                table: "UserWordGroup",
+                column: "WordGroupsWordGroupId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Words_AuthorId",
                 table: "Words",
                 column: "AuthorId");
@@ -117,7 +159,13 @@ namespace DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "UserWordGroup");
+
+            migrationBuilder.DropTable(
                 name: "WordWordGroup");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "WordGroups");

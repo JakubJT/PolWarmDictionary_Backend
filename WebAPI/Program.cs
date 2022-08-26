@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using DAL;
+using MediatR;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +12,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMediatR(typeof(ApplicationServices.Domain.ResponseBase<>).GetTypeInfo().Assembly);
+// builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+
 
 builder.Services.AddDbContext<DictionaryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DictionaryContextSQL")));
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

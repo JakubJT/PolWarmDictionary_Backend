@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DictionaryContext))]
-    [Migration("20220311205230_InitialCreate")]
+    [Migration("20220819121615_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,22 @@ namespace DAL.Migrations
                     b.ToTable("PartOfSpeeches");
                 });
 
+            modelBuilder.Entity("DAL.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("User");
+                });
+
             modelBuilder.Entity("DAL.Models.Word", b =>
                 {
                     b.Property<int>("WordId")
@@ -67,10 +83,10 @@ namespace DAL.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ContentPol")
+                    b.Property<string>("InPolish")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContentWar")
+                    b.Property<string>("InWarmian")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PartOfSpeechId")
@@ -99,6 +115,21 @@ namespace DAL.Migrations
                     b.HasKey("WordGroupId");
 
                     b.ToTable("WordGroups");
+                });
+
+            modelBuilder.Entity("UserWordGroup", b =>
+                {
+                    b.Property<int>("UsersUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WordGroupsWordGroupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UsersUserId", "WordGroupsWordGroupId");
+
+                    b.HasIndex("WordGroupsWordGroupId");
+
+                    b.ToTable("UserWordGroup");
                 });
 
             modelBuilder.Entity("WordWordGroup", b =>
@@ -131,6 +162,21 @@ namespace DAL.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("PartOfSpeech");
+                });
+
+            modelBuilder.Entity("UserWordGroup", b =>
+                {
+                    b.HasOne("DAL.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.WordGroup", null)
+                        .WithMany()
+                        .HasForeignKey("WordGroupsWordGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WordWordGroup", b =>

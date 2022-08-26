@@ -17,7 +17,7 @@ namespace DAL
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-    => options.UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True");
+    => options.UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=dictionary;Trusted_Connection=True");
 
         public DbSet<Word>? Words { get; set; }
         public DbSet<Author>? Authors { get; set; }

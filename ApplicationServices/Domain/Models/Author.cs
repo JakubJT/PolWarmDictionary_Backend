@@ -1,4 +1,4 @@
-namespace DAL.Models;
+namespace ApplicationServices.Domain.Models;
 public class Author
 {
     public int AuthorId { get; set; }

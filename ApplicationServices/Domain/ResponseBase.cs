@@ -1,4 +1,4 @@
-namespace ApplicationServicese.Domain;
+namespace ApplicationServices.Domain;
 
 public class ResponseBase<T>
 {

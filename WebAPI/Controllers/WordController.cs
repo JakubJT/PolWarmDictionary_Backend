@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using DAL.Models;
-using System.Threading.Tasks;
-using System.Linq;
 using DAL;
+using MediatR;
+using ApplicationServices.Domain.WordActions.Queries;
+using ApplicationServices.Domain.Models;
 
 namespace WebAPI.Controllers;
 
@@ -11,31 +11,27 @@ namespace WebAPI.Controllers;
 public class WordController : ControllerBase
 {
 
-    private readonly ILogger<WeatherForecastController> _logger;
-    private readonly DictionaryContext _dictionaryContext;
+    private readonly ILogger<WordController> _logger;
+    private readonly IMediator _mediator;
 
-    public WordController(ILogger<WeatherForecastController> logger, DictionaryContext dictionaryContext)
+    public WordController(ILogger<WordController> logger, DictionaryContext dictionaryContext, IMediator mediator)
     {
         _logger = logger;
-        _dictionaryContext = dictionaryContext;
-    }
-
-    [HttpGet(Name = "GetWords")]
-    public IEnumerable<Word> GetWords()
-    {
-        return _dictionaryContext.Words.ToList();
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public Word GetWordWar(string? ContentPol)
+    public async Task<ActionResult<IEnumerable<Word>>> GetAllWords([FromQuery] GetWordsQuery request)
     {
-        return _dictionaryContext.Words?.FirstOrDefault(word => word.ContentPol == ContentPol);
+        var response = await _mediator.Send(request);
+        return this.Ok(response);
     }
 
     [HttpGet]
-    public Word GetWordPol(string? ContentWar)
+    public async Task<ActionResult<Word>> GetWord(string word, bool translateFromPolish)
     {
-        return _dictionaryContext.Words?.FirstOrDefault(word => word.ContentWar == ContentWar);
+        var response = await _mediator.Send(new GetWordQuery() { Word = word, TranslateFromPolish = translateFromPolish });
+        if (response == null) return NotFound();
+        return response;
     }
-
 }

@@ -1,5 +1,5 @@
-namespace DAL.Models;
-public class PartOfSpeech : ModelBase
+namespace ApplicationServices.Domain.Models;
+public class PartOfSpeech
 {
     public int PartOfSpeechId { get; set; }
     public string? Name { get; set; }

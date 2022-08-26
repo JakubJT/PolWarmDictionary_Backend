@@ -38,62 +38,62 @@ namespace DAL
 
             var stryjna = new Word
             {
-                ContentWar = "Stryjna",
-                ContentPol = "Żona styja",
+                InWarmian = "Stryjna",
+                InPolish = "Żona styja",
                 Author = kuba,
                 PartOfSpeech = noun
             };
 
             var czlek = new Word
             {
-                ContentWar = "Człek",
-                ContentPol = "Człowiek",
+                InWarmian = "Człek",
+                InPolish = "Człowiek",
                 Author = kuba,
                 PartOfSpeech = noun
             };
 
             var grubasa = new Word
             {
-                ContentWar = "Grubasa",
-                ContentPol = "Grubas",
+                InWarmian = "Grubasa",
+                InPolish = "Grubas",
                 Author = kuba,
                 PartOfSpeech = noun
             };
 
             var ruchelka = new Word
             {
-                ContentWar = "Ruchełka",
-                ContentPol = "Bukiet",
+                InWarmian = "Ruchełka",
+                InPolish = "Bukiet",
                 Author = innyKuba,
                 PartOfSpeech = noun
             };
             var chojina = new Word
             {
-                ContentWar = "Chojina",
-                ContentPol = "Sosna",
+                InWarmian = "Chojina",
+                InPolish = "Sosna",
                 Author = innyKuba,
                 PartOfSpeech = noun
             };
 
             var jerzba = new Word
             {
-                ContentWar = "Jerzba",
-                ContentPol = "Wierzba",
+                InWarmian = "Jerzba",
+                InPolish = "Wierzba",
                 Author = kuba,
                 PartOfSpeech = noun
             };
             var kruszka = new Word
             {
-                ContentWar = "Kruszka",
-                ContentPol = "Grusza",
+                InWarmian = "Kruszka",
+                InPolish = "Grusza",
                 Author = innyKuba,
                 PartOfSpeech = noun
             };
 
             var sztery = new Word
             {
-                ContentWar = "Sztery",
-                ContentPol = "Cztery",
+                InWarmian = "Sztery",
+                InPolish = "Cztery",
                 Author = kuba
             };
             context.AddRange(kruszka, jerzba, chojina, ruchelka, czlek, stryjna, grubasa);

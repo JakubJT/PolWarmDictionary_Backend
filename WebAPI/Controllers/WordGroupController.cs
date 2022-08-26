@@ -12,10 +12,10 @@ namespace WebAPI.Controllers;
 public class WordGroupController : ControllerBase
 {
 
-    private readonly ILogger<WeatherForecastController> _logger;
+    private readonly ILogger<WordGroupController> _logger;
     private readonly DictionaryContext _dictionaryContext;
 
-    public WordGroupController(ILogger<WeatherForecastController> logger, DictionaryContext dictionaryContext)
+    public WordGroupController(ILogger<WordGroupController> logger, DictionaryContext dictionaryContext)
     {
         _logger = logger;
         _dictionaryContext = dictionaryContext;

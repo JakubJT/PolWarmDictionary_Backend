@@ -81,10 +81,10 @@ namespace DAL.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ContentPol")
+                    b.Property<string>("InPolish")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContentWar")
+                    b.Property<string>("InWarmian")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PartOfSpeechId")
