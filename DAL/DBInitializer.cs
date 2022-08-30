@@ -27,13 +27,33 @@ namespace DAL
 
             var noun = new PartOfSpeech
             {
-                Name = "Noun"
+                Name = "Rzeczownik"
             };
-            var liczebnik = new PartOfSpeech
+            var verb = new PartOfSpeech
+            {
+                Name = "Czasownik"
+            };
+            var numeral = new PartOfSpeech
             {
                 Name = "Liczebnik"
             };
-            context.AddRange(noun, liczebnik);
+            var adjective = new PartOfSpeech
+            {
+                Name = "Przymiotnik"
+            };
+            var adverb = new PartOfSpeech
+            {
+                Name = "Przysłówek"
+            };
+            var pronoun = new PartOfSpeech
+            {
+                Name = "Zaimek"
+            };
+            var other = new PartOfSpeech
+            {
+                Name = "Inna"
+            };
+            context.AddRange(noun, verb, numeral, adjective, adverb, pronoun, other);
             context.SaveChanges();
 
             var stryjna = new Word
@@ -94,7 +114,8 @@ namespace DAL
             {
                 InWarmian = "Sztery",
                 InPolish = "Cztery",
-                Author = kuba
+                Author = kuba,
+                PartOfSpeech = numeral
             };
             context.AddRange(kruszka, jerzba, chojina, ruchelka, czlek, stryjna, grubasa);
             context.SaveChanges();

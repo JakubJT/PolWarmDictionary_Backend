@@ -32,5 +32,4 @@ public class WordGroupController : ControllerBase
     {
         return await _dictionaryContext.WordGroups?.FirstOrDefaultAsync(wordGroup => wordGroup.WordGroupId == WordGroupId);
     }
-
 }

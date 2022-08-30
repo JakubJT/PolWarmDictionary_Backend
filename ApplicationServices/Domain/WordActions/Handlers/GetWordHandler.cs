@@ -7,8 +7,8 @@ namespace ApplicationServices.Domain.WordActions.Handlers;
 
 public class GetWordHandler : IRequestHandler<GetWordQuery, Word>
 {
-    private readonly IRepository<DAL.Models.Word> _wordRepository;
-    public GetWordHandler(IRepository<DAL.Models.Word> wordRepository)
+    private readonly WordRepository _wordRepository;
+    public GetWordHandler(WordRepository wordRepository)
     {
         _wordRepository = wordRepository;
     }
@@ -18,6 +18,7 @@ public class GetWordHandler : IRequestHandler<GetWordQuery, Word>
         if (word == null) return default(Word);
         return new Domain.Models.Word()
         {
+            Id = word.WordId,
             InPolish = word.InPolish,
             InWarmian = word.InWarmian,
             PartOfSpeech = word.PartOfSpeech.Name

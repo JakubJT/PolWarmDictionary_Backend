@@ -19,7 +19,8 @@ builder.Services.AddMediatR(typeof(ApplicationServices.Domain.ResponseBase<>).Ge
 builder.Services.AddDbContext<DictionaryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DictionaryContextSQL")));
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<WordRepository>();
+builder.Services.AddScoped<PartOfSpeechRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

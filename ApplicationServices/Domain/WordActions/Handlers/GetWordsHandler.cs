@@ -10,8 +10,8 @@ namespace ApplicationServices.Domain.WordActions.Handlers;
 
 public class GetWordsHandler : IRequestHandler<GetWordsQuery, List<Word>>
 {
-    private readonly IRepository<DAL.Models.Word> _wordRepository;
-    public GetWordsHandler(IRepository<DAL.Models.Word> wordRepository)
+    private readonly WordRepository _wordRepository;
+    public GetWordsHandler(WordRepository wordRepository)
     {
         _wordRepository = wordRepository;
     }

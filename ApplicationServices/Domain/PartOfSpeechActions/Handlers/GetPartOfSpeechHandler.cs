@@ -1,30 +1,25 @@
 using MediatR;
 using ApplicationServices.Domain;
 using DAL;
-using DAL.Models;
-using System.Linq;
+using ApplicationServices.Domain.Models;
+using ApplicationServices.Domain.PartOfSpeechActions.Queries;
 
 namespace ApplicationServices.Domain.PartOfSpeechActions.Handlers;
 
-public class GetPartOfSpeechHandler : IRequestHandler<GetPartOfSpeechRequest, GetPartOfSpeechResponse>
+public class GetPartOfSpeechHandler : IRequestHandler<GetPartOfSpeechQuery, PartOfSpeech>
 {
-    private readonly IRepository<PartOfSpeech> _partOfSpeechRepository;
-    public GetPartOfSpeechHandler(IRepository<PartOfSpeech> partOfSpeechRepository)
+    private readonly PartOfSpeechRepository _partOfSpeechRepository;
+    public GetPartOfSpeechHandler(PartOfSpeechRepository partOfSpeechRepository)
     {
         _partOfSpeechRepository = partOfSpeechRepository;
     }
-    public Task<GetPartOfSpeechResponse> Handle(GetPartOfSpeechRequest request, CancellationToken cancellationToken)
+    public async Task<PartOfSpeech> Handle(GetPartOfSpeechQuery request, CancellationToken cancellationToken)
     {
-        var partOfSpeech = _partOfSpeechRepository.GetItem(33);
-        var domainPartOfSpeech = new ApplicationServices.Domain.Models.PartOfSpeech()
+        var partOfSpeech = await _partOfSpeechRepository.GetItemByName(request.Name);
+        return new PartOfSpeech()
         {
+            PartOfSpeechId = partOfSpeech.PartOfSpeechId,
+            Name = partOfSpeech.Name
         };
-
-        var response = new GetPartOfSpeechResponse()
-        {
-            Data = domainPartOfSpeech
-        };
-
-        return Task.FromResult(response);
     }
 }

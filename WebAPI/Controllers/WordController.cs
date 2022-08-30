@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using DAL;
 using MediatR;
 using ApplicationServices.Domain.WordActions.Queries;
+using ApplicationServices.Domain.WordActions.Commands;
 using ApplicationServices.Domain.Models;
+using ApplicationServices.Domain.PartOfSpeechActions.Queries;
 
 namespace WebAPI.Controllers;
 
@@ -10,7 +12,7 @@ namespace WebAPI.Controllers;
 [Route("[controller]/[action]")]
 public class WordController : ControllerBase
 {
-
+    private readonly DictionaryContext _dictionaryContext;
     private readonly ILogger<WordController> _logger;
     private readonly IMediator _mediator;
 
@@ -18,6 +20,7 @@ public class WordController : ControllerBase
     {
         _logger = logger;
         _mediator = mediator;
+        _dictionaryContext = dictionaryContext;
     }
 
     [HttpGet]
@@ -33,5 +36,13 @@ public class WordController : ControllerBase
         var response = await _mediator.Send(new GetWordQuery() { Word = word, TranslateFromPolish = translateFromPolish });
         if (response == null) return NotFound();
         return response;
+
+    }
+    [HttpPost]
+    public async Task<IActionResult> EditWord(Word word)
+    {
+        var partOfSpeech = await _mediator.Send(new GetPartOfSpeechQuery() { Name = word.PartOfSpeech });
+        var response = await _mediator.Send(new EditWordCommand() { Word = word, PartOfSpeechId = partOfSpeech.PartOfSpeechId });
+        return NoContent();
     }
 }
