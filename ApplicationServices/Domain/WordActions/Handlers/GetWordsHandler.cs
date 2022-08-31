@@ -13,12 +13,13 @@ public class GetWordsHandler : IRequestHandler<GetWordsQuery, List<Word>>
 {
     private readonly WordRepository _wordRepository;
     private readonly IMapper _mapper;
+
     public GetWordsHandler(WordRepository wordRepository, IMapper mapper)
     {
         _wordRepository = wordRepository;
         _mapper = mapper;
-
     }
+
     public Task<List<Word>> Handle(GetWordsQuery request, CancellationToken cancellationToken)
     {
         var words = _wordRepository.GetAllItems().Include(w => w.PartOfSpeech);
