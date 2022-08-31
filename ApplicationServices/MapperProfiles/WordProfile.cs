@@ -6,6 +6,8 @@ public class WordProfile : Profile
 {
     public WordProfile()
     {
-        this.CreateMap<DAL.Models.Word, ApplicationServices.Domain.Models.Word>();
+        CreateMap<DAL.Models.Word, ApplicationServices.Domain.Models.Word>()
+            .ForMember(dest => dest.PartOfSpeech, opt => opt.MapFrom(src => src.PartOfSpeech.Name))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WordId));
     }
 }

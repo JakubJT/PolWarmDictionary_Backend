@@ -3,6 +3,7 @@ using Microsoft.Net.Http.Headers;
 using DAL;
 using MediatR;
 using System.Reflection;
+using ApplicationServices.MapperProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,8 @@ builder.Services.AddDbContext<DictionaryContext>(options =>
 
 builder.Services.AddScoped<WordRepository>();
 builder.Services.AddScoped<PartOfSpeechRepository>();
+builder.Services.AddAutoMapper(typeof(WordProfile));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

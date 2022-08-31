@@ -38,11 +38,36 @@ public class WordController : ControllerBase
         return response;
 
     }
+
+    // [HttpGet]
+    // public async Task<ActionResult<Word>> GetWord(int wordId)
+    // {
+    //     var response = await _mediator.Send(new GetWordByIdQuery() { WordId = wordId });
+    //     if (response == null) return NotFound();
+    //     return response;
+
+    // }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateWord(Word word)
+    {
+        var partOfSpeech = await _mediator.Send(new GetPartOfSpeechQuery() { Name = word.PartOfSpeech });
+        var response = await _mediator.Send(new CreateWordCommand() { Word = word, PartOfSpeechId = partOfSpeech.PartOfSpeechId });
+        return NoContent();
+    }
+
     [HttpPost]
     public async Task<IActionResult> EditWord(Word word)
     {
         var partOfSpeech = await _mediator.Send(new GetPartOfSpeechQuery() { Name = word.PartOfSpeech });
         var response = await _mediator.Send(new EditWordCommand() { Word = word, PartOfSpeechId = partOfSpeech.PartOfSpeechId });
+        return NoContent();
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteWord(int wordId)
+    {
+        var response = await _mediator.Send(new DeleteWordCommand() { WordId = wordId });
         return NoContent();
     }
 }

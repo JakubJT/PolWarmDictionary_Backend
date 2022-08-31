@@ -21,6 +21,11 @@ public class WordRepository : Repository<Word>
         else return await Context.Words.Include(w => w.PartOfSpeech).FirstOrDefaultAsync(wx => wx.InWarmian == word);
     }
 
+    public async Task<Word> GetWordById(int id)
+    {
+        return await Context.Words.FirstOrDefaultAsync(w => w.WordId == id);
+    }
+
     public async Task<Word> GetWordWithIncludes(int wordId)
     {
         return await Context.Words
@@ -29,9 +34,23 @@ public class WordRepository : Repository<Word>
             .FirstOrDefaultAsync(wx => wx.WordId == wordId);
     }
 
+    public async Task CreateWord(Word word)
+    {
+        Context.Words.Add(word);
+        await Context.SaveChangesAsync();
+
+    }
     public async Task EditWord(Word word)
     {
         Context.Update(word);
+        await Context.SaveChangesAsync();
+    }
+
+    public async Task DeleteWord(int wordId)
+    {
+
+        var wordToDelete = new Word() { WordId = wordId };
+        Context.Words.Remove(wordToDelete);
         await Context.SaveChangesAsync();
     }
 
