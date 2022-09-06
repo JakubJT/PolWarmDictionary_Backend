@@ -13,7 +13,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMediatR(typeof(ApplicationServices.Domain.ResponseBase<>).GetTypeInfo().Assembly);
+builder.Services.AddMediatR(typeof(ApplicationServices.MapperProfiles.WordProfile));
 // builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
 
@@ -47,6 +47,16 @@ app.UseCors(policy =>
     .WithHeaders(HeaderNames.ContentType));
 
 app.UseHttpsRedirection();
+
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/error-development");
+}
+else
+{
+    app.UseExceptionHandler("/error");
+}
 
 app.UseAuthorization();
 

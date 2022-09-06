@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DictionaryContext))]
-    [Migration("20220829174643_InitialCreate")]
+    [Migration("20220906160058_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,10 +84,14 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("InPolish")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("InWarmian")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<int?>("PartOfSpeechId")
                         .HasColumnType("int");
@@ -114,7 +118,7 @@ namespace DAL.Migrations
 
                     b.HasKey("WordGroupId");
 
-                    b.ToTable("WordGroups");
+                    b.ToTable("WordGroup", (string)null);
                 });
 
             modelBuilder.Entity("UserWordGroup", b =>

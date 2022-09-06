@@ -48,7 +48,7 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WordGroups",
+                name: "WordGroup",
                 columns: table => new
                 {
                     WordGroupId = table.Column<int>(type: "int", nullable: false)
@@ -57,7 +57,7 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WordGroups", x => x.WordGroupId);
+                    table.PrimaryKey("PK_WordGroup", x => x.WordGroupId);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,8 +66,8 @@ namespace DAL.Migrations
                 {
                     WordId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InWarmian = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InPolish = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InWarmian = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    InPolish = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
                     PartOfSpeechId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -104,9 +104,9 @@ namespace DAL.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserWordGroup_WordGroups_WordGroupsWordGroupId",
+                        name: "FK_UserWordGroup_WordGroup_WordGroupsWordGroupId",
                         column: x => x.WordGroupsWordGroupId,
-                        principalTable: "WordGroups",
+                        principalTable: "WordGroup",
                         principalColumn: "WordGroupId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -122,9 +122,9 @@ namespace DAL.Migrations
                 {
                     table.PrimaryKey("PK_WordWordGroup", x => new { x.WordGroupsWordGroupId, x.WordsWordId });
                     table.ForeignKey(
-                        name: "FK_WordWordGroup_WordGroups_WordGroupsWordGroupId",
+                        name: "FK_WordWordGroup_WordGroup_WordGroupsWordGroupId",
                         column: x => x.WordGroupsWordGroupId,
-                        principalTable: "WordGroups",
+                        principalTable: "WordGroup",
                         principalColumn: "WordGroupId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -168,7 +168,7 @@ namespace DAL.Migrations
                 name: "User");
 
             migrationBuilder.DropTable(
-                name: "WordGroups");
+                name: "WordGroup");
 
             migrationBuilder.DropTable(
                 name: "Words");

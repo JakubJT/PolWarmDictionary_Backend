@@ -5,6 +5,8 @@ using ApplicationServices.Domain.WordActions.Queries;
 using ApplicationServices.Domain.WordActions.Commands;
 using ApplicationServices.Domain.Models;
 using ApplicationServices.Domain.PartOfSpeechActions.Queries;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace WebAPI.Controllers;
 
@@ -23,20 +25,49 @@ public class WordController : ControllerBase
         _dictionaryContext = dictionaryContext;
     }
 
+    [Route("/error-development")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public IActionResult HandleErrorDevelopment(
+    [FromServices] IHostEnvironment hostEnvironment)
+    {
+        if (!hostEnvironment.IsDevelopment())
+        {
+            return NotFound();
+        }
+
+        var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
+
+        return Problem(
+            detail: exceptionHandlerFeature.Error.StackTrace,
+            title: exceptionHandlerFeature.Error.Message);
+    }
+
+    [Route("/error")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public IActionResult HandleError()
+    {
+        var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
+        _logger.LogError(exceptionHandlerFeature.Error, "Error");
+        return Problem();
+    }
+
+
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<Word>>> GetAllWords([FromQuery] GetWordsQuery request)
     {
         var response = await _mediator.Send(request);
-        return this.Ok(response);
+        return response;
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Word>> GetWord(string word, bool translateFromPolish)
     {
         var response = await _mediator.Send(new GetWordQuery() { Word = word, TranslateFromPolish = translateFromPolish });
-        if (response == null) return NotFound();
+        if (response == null) return NoContent();
         return response;
-
     }
 
     // [HttpGet]
@@ -49,6 +80,7 @@ public class WordController : ControllerBase
     // }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CreateWord(Word word)
     {
         var partOfSpeech = await _mediator.Send(new GetPartOfSpeechQuery() { Name = word.PartOfSpeech });
@@ -57,16 +89,25 @@ public class WordController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> EditWord(Word word)
     {
-        var partOfSpeech = await _mediator.Send(new GetPartOfSpeechQuery() { Name = word.PartOfSpeech });
-        var response = await _mediator.Send(new EditWordCommand() { Word = word, PartOfSpeechId = partOfSpeech.PartOfSpeechId });
+        var wordFromDB = await _mediator.Send(new GetWordByIdQuery() { WordId = word.Id });
+        if (wordFromDB.Word == null) return NotFound();
+
+        var response = await _mediator.Send(new EditWordCommand() { Word = word, PartOfSpeechId = (int)wordFromDB.PartOfSpeechId });
         return NoContent();
     }
 
     [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteWord(int wordId)
     {
+        var wordFromDB = await _mediator.Send(new GetWordByIdQuery() { WordId = wordId });
+        if (wordFromDB.Word == null) return NotFound();
+
         var response = await _mediator.Send(new DeleteWordCommand() { WordId = wordId });
         return NoContent();
     }

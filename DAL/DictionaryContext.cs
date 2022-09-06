@@ -23,6 +23,13 @@ namespace DAL
         public DbSet<Author>? Authors { get; set; }
         public DbSet<PartOfSpeech>? PartOfSpeeches { get; set; }
         public DbSet<WordGroup>? WordGroups { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<WordGroup>().ToTable(nameof(WordGroup))
+                .HasMany(wg => wg.Words)
+                .WithMany(w => w.WordGroups);
+        }
     }
 }
 

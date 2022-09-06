@@ -23,7 +23,7 @@ public class WordRepository : Repository<Word>
 
     public async Task<Word> GetWordById(int id)
     {
-        return await Context.Words.FirstOrDefaultAsync(w => w.WordId == id);
+        return await Context.Words.AsNoTracking().FirstOrDefaultAsync(w => w.WordId == id);
     }
 
     public async Task<Word> GetWordWithIncludes(int wordId)
@@ -48,7 +48,6 @@ public class WordRepository : Repository<Word>
 
     public async Task DeleteWord(int wordId)
     {
-
         var wordToDelete = new Word() { WordId = wordId };
         Context.Words.Remove(wordToDelete);
         await Context.SaveChangesAsync();

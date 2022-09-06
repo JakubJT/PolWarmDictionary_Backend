@@ -82,10 +82,14 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("InPolish")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("InWarmian")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<int?>("PartOfSpeechId")
                         .HasColumnType("int");
@@ -112,7 +116,7 @@ namespace DAL.Migrations
 
                     b.HasKey("WordGroupId");
 
-                    b.ToTable("WordGroups");
+                    b.ToTable("WordGroup", (string)null);
                 });
 
             modelBuilder.Entity("UserWordGroup", b =>

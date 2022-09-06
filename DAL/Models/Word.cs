@@ -1,8 +1,20 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DAL.Models;
 public class Word : ModelBase
 {
     public int WordId { get; set; }
+
+    [Required]
+    [DataType(DataType.Text)]
+    [StringLength(16, MinimumLength = 2)]
+    [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
     public string? InWarmian { get; set; }
+
+    [Required]
+    [DataType(DataType.Text)]
+    [StringLength(16, MinimumLength = 2)]
+    [RegularExpression(@"^[A-Z]+[a-zA-Z\s]*$")]
     public string? InPolish { get; set; }
 
     public int AuthorId { get; set; }
