@@ -20,6 +20,6 @@ public class CreateWordHandler : AsyncRequestHandler<CreateWordCommand>
     protected async override Task Handle(CreateWordCommand request, CancellationToken cancellationToken)
     {
         var dalWord = _mapper.Map<DAL.Models.Word>(request);
-        await _wordRepository.EditWord(dalWord);
+        await _wordRepository.CreateWord(dalWord);
     }
 }

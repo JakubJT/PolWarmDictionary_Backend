@@ -9,7 +9,7 @@ using AutoMapper;
 
 namespace ApplicationServices.Domain.WordActions.Handlers;
 
-public class GetWordsHandler : IRequestHandler<GetWordsQuery, List<Word>>
+public class GetWordsHandler : IRequestHandler<GetWordsQuery, Words>
 {
     private readonly WordRepository _wordRepository;
     private readonly IMapper _mapper;
@@ -20,10 +20,10 @@ public class GetWordsHandler : IRequestHandler<GetWordsQuery, List<Word>>
         _mapper = mapper;
     }
 
-    public Task<List<Word>> Handle(GetWordsQuery request, CancellationToken cancellationToken)
+    public async Task<Words> Handle(GetWordsQuery request, CancellationToken cancellationToken)
     {
-        var words = _wordRepository.GetAllItems().Include(w => w.PartOfSpeech);
+        var (words, numbeOfPages) = await _wordRepository.GetWords(request.AscendingOrder, request.SortBy, request.PageNumber, request.WordsPerPage);
         var domainWords = _mapper.Map<List<ApplicationServices.Domain.Models.Word>>(words);
-        return Task.FromResult(domainWords);
+        return new Words() { WordList = domainWords, NumbeOfPages = numbeOfPages };
     }
 }

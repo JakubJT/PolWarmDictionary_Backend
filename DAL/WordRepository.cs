@@ -10,9 +10,53 @@ public class WordRepository : Repository<Word>
     {
     }
 
-    public async Task<Word> GetItem(int itemId)
+    public async Task<(List<Word> Words, int NumbeOfPages)> GetWords(bool ascendingOrder, string sortBy, int pageNumber, int wordsPerPage)
     {
-        return await Items.FirstOrDefaultAsync();
+        IQueryable<Word> words = from w in Context.Words
+                                 select w;
+        int wordsCount = await words.CountAsync();
+        int numbeOfPages;
+        if ((wordsCount % wordsPerPage) == 0) numbeOfPages = wordsCount / wordsPerPage;
+        else numbeOfPages = wordsCount / wordsPerPage + 1;
+
+        if (ascendingOrder)
+        {
+            switch (sortBy)
+            {
+                case "InPolish":
+                    words = words.OrderBy(w => w.InPolish);
+                    break;
+                case "InWarmian":
+                    words = words.OrderBy(w => w.InWarmian);
+                    break;
+                case "PartOfSpeech":
+                    words = words.OrderBy(w => w.PartOfSpeech.Name);
+                    break;
+            }
+        }
+
+        else
+        {
+            switch (sortBy)
+            {
+                case "InPolish":
+                    words = words.OrderByDescending(w => w.InPolish);
+                    break;
+                case "InWarmian":
+                    words = words.OrderByDescending(w => w.InWarmian);
+                    break;
+                case "PartOfSpeech":
+                    words = words.OrderByDescending(w => w.PartOfSpeech.Name);
+                    break;
+            }
+        }
+
+        words = words.Skip((pageNumber - 1) * wordsPerPage)
+                    .Take(wordsPerPage)
+                    .Include(w => w.PartOfSpeech)
+                    .AsNoTracking();
+
+        return (await words.ToListAsync(), numbeOfPages);
     }
 
     public async Task<Word> GetWord(string word, bool translateFromPolish)
@@ -24,14 +68,6 @@ public class WordRepository : Repository<Word>
     public async Task<Word> GetWordById(int id)
     {
         return await Context.Words.AsNoTracking().FirstOrDefaultAsync(w => w.WordId == id);
-    }
-
-    public async Task<Word> GetWordWithIncludes(int wordId)
-    {
-        return await Context.Words
-            .Include(w => w.PartOfSpeech)
-            .Include(w => w.Author)
-            .FirstOrDefaultAsync(wx => wx.WordId == wordId);
     }
 
     public async Task CreateWord(Word word)

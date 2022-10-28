@@ -14,7 +14,7 @@ public class Repository<T> : IRepository<T> where T : Models.ModelBase
         Context = context;
         Items = context.Set<T>();
     }
-    public DbSet<T> GetAllItems()
+    public DbSet<T> GetAllItemsOld()
     {
         return Items;
     }

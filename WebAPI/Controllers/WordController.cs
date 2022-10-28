@@ -14,15 +14,13 @@ namespace WebAPI.Controllers;
 [Route("[controller]/[action]")]
 public class WordController : ControllerBase
 {
-    private readonly DictionaryContext _dictionaryContext;
     private readonly ILogger<WordController> _logger;
     private readonly IMediator _mediator;
 
-    public WordController(ILogger<WordController> logger, DictionaryContext dictionaryContext, IMediator mediator)
+    public WordController(ILogger<WordController> logger, IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
-        _dictionaryContext = dictionaryContext;
     }
 
     [Route("/error-development")]
@@ -54,9 +52,15 @@ public class WordController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<Word>>> GetAllWords([FromQuery] GetWordsQuery request)
+    public async Task<ActionResult<Words>> GetWords(string sortBy, bool ascendingOrder, int pageNumber = 0, int wordsPerPage = 20)
     {
-        var response = await _mediator.Send(request);
+        var response = await _mediator.Send(new GetWordsQuery()
+        {
+            AscendingOrder = ascendingOrder,
+            SortBy = sortBy,
+            PageNumber = pageNumber,
+            WordsPerPage = wordsPerPage
+        });
         return response;
     }
 
