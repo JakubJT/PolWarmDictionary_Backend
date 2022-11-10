@@ -15,6 +15,7 @@ public class Word
     [StringLength(16, MinimumLength = 2)]
     [RegularExpression(@"^[A-ZĄĘÓŃŻŹĆ]+[a-ząężźćóńA-ZĄĘÓŃŻŹĆ\s]*$")]
     public string? InPolish { get; set; }
-    public string PartOfSpeech { get; set; }
+    public string? PartOfSpeech { get; set; }
+    public int PartOfSpeechId { get; set; }
 
 }

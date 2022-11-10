@@ -67,7 +67,7 @@ public class WordRepository : Repository<Word>
 
     public async Task<Word> GetWordById(int id)
     {
-        return await Context.Words.AsNoTracking().FirstOrDefaultAsync(w => w.WordId == id);
+        return await Context.Words.AsNoTracking().Include(w => w.PartOfSpeech).FirstOrDefaultAsync(wx => wx.WordId == id);
     }
 
     public async Task CreateWord(Word word)
@@ -87,6 +87,14 @@ public class WordRepository : Repository<Word>
         var wordToDelete = new Word() { WordId = wordId };
         Context.Words.Remove(wordToDelete);
         await Context.SaveChangesAsync();
+    }
+
+    public async Task<bool> CheckIfWordExists(Word word)
+    {
+        var wordFromDB = await Context.Words.
+                            SingleOrDefaultAsync(w => w.InPolish == word.InPolish && w.InWarmian == word.InWarmian && w.PartOfSpeechId == word.PartOfSpeechId);
+        if (wordFromDB == default) return false;
+        else return true;
     }
 
 }

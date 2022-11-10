@@ -74,34 +74,53 @@ public class WordController : ControllerBase
         return response;
     }
 
-    // [HttpGet]
-    // public async Task<ActionResult<Word>> GetWord(int wordId)
-    // {
-    //     var response = await _mediator.Send(new GetWordByIdQuery() { WordId = wordId });
-    //     if (response == null) return NotFound();
-    //     return response;
+    [HttpGet]
+    public async Task<ActionResult<Word>> GetWordById(int wordId)
+    {
+        var response = await _mediator.Send(new GetWordByIdQuery() { WordId = wordId });
+        if (response.Word == null) return NotFound();
+        return response.Word;
 
-    // }
+    }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CreateWord(Word word)
     {
-        var partOfSpeech = await _mediator.Send(new GetPartOfSpeechQuery() { Name = word.PartOfSpeech });
-        var response = await _mediator.Send(new CreateWordCommand() { Word = word, PartOfSpeechId = partOfSpeech.PartOfSpeechId });
-        return NoContent();
+        var wordAlreadyExists = await _mediator.Send(new CheckIfWordExistsQuery() { Word = word });
+
+        if (wordAlreadyExists)
+        {
+            return Conflict();
+        }
+        else
+        {
+            var response = await _mediator.Send(new CreateWordCommand() { Word = word });
+            return NoContent();
+        }
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> EditWord(Word word)
     {
         var wordFromDB = await _mediator.Send(new GetWordByIdQuery() { WordId = word.Id });
         if (wordFromDB.Word == null) return NotFound();
 
-        var response = await _mediator.Send(new EditWordCommand() { Word = word, PartOfSpeechId = (int)wordFromDB.PartOfSpeechId });
-        return NoContent();
+        var wordAlreadyExists = await _mediator.Send(new CheckIfWordExistsQuery() { Word = word });
+
+        if (wordAlreadyExists)
+        {
+            return Conflict();
+        }
+        else
+        {
+            var response = await _mediator.Send(new EditWordCommand() { Word = word });
+            return NoContent();
+        }
     }
 
     [HttpDelete]
