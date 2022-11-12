@@ -6,7 +6,7 @@ using AutoMapper;
 
 namespace ApplicationServices.Domain.WordActions.Handlers;
 
-public class GetWordHandler : IRequestHandler<GetWordQuery, Word>
+public class GetWordHandler : IRequestHandler<GetWordQuery, List<Word>>
 {
     private readonly WordRepository _wordRepository;
     private readonly IMapper _mapper;
@@ -17,10 +17,10 @@ public class GetWordHandler : IRequestHandler<GetWordQuery, Word>
         _mapper = mapper;
     }
 
-    public async Task<Word> Handle(GetWordQuery request, CancellationToken cancellationToken)
+    public async Task<List<Word>> Handle(GetWordQuery request, CancellationToken cancellationToken)
     {
-        var word = await _wordRepository.GetWord(request.Word, request.TranslateFromPolish);
-        if (word == null) return default(Word);
-        return _mapper.Map<ApplicationServices.Domain.Models.Word>(word);
+        var translationOfWord = await _wordRepository.GetWord(request.Word, request.TranslateFromPolish);
+        if (translationOfWord == null) return default(List<Word>);
+        return _mapper.Map<List<ApplicationServices.Domain.Models.Word>>(translationOfWord);
     }
 }

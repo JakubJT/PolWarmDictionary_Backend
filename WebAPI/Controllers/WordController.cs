@@ -67,7 +67,7 @@ public class WordController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult<Word>> GetWord(string word, bool translateFromPolish)
+    public async Task<ActionResult<List<Word>>> GetWord(string word, bool translateFromPolish)
     {
         var response = await _mediator.Send(new GetWordQuery() { Word = word, TranslateFromPolish = translateFromPolish });
         if (response == null) return NoContent();

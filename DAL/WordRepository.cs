@@ -59,10 +59,10 @@ public class WordRepository : Repository<Word>
         return (await words.ToListAsync(), numbeOfPages);
     }
 
-    public async Task<Word> GetWord(string word, bool translateFromPolish)
+    public async Task<List<Word>> GetWord(string word, bool translateFromPolish)
     {
-        if (translateFromPolish) return await Context.Words.Include(w => w.PartOfSpeech).FirstOrDefaultAsync(wx => wx.InPolish == word);
-        else return await Context.Words.Include(w => w.PartOfSpeech).FirstOrDefaultAsync(wx => wx.InWarmian == word);
+        if (translateFromPolish) return await Context.Words.Include(w => w.PartOfSpeech).Where(wx => wx.InPolish == word).ToListAsync();
+        else return await Context.Words.Include(w => w.PartOfSpeech).Where(wx => wx.InWarmian == word).ToListAsync();
     }
 
     public async Task<Word> GetWordById(int id)
