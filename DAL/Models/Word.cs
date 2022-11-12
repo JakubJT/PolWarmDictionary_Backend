@@ -8,13 +8,13 @@ public class Word : ModelBase
     [Required]
     [DataType(DataType.Text)]
     [StringLength(16, MinimumLength = 2)]
-    [RegularExpression(@"^[A-ZĄĘÓŃŻŹĆ]+[a-ząężźćóńA-ZĄĘÓŃŻŹĆ\s]*$")]
+    [RegularExpression(@"^[A-ZĄĘÓŃŻŹĆŁ]+[a-ząężźćóńłA-ZĄĘÓŃŻŹĆŁ\s]*$")]
     public string? InWarmian { get; set; }
 
     [Required]
     [DataType(DataType.Text)]
     [StringLength(16, MinimumLength = 2)]
-    [RegularExpression(@"^[A-ZĄĘÓŃŻŹĆ]+[a-ząężźćóńA-ZĄĘÓŃŻŹĆ\s]*$")]
+    [RegularExpression(@"^[A-ZĄĘÓŃŻŹĆŁ]+[a-ząężźćóńłA-ZĄĘÓŃŻŹĆŁ\s]*$")]
     public string? InPolish { get; set; }
 
     public int AuthorId { get; set; }
