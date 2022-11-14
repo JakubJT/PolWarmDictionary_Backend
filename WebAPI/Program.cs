@@ -18,7 +18,7 @@ builder.Services.AddMediatR(typeof(ApplicationServices.MapperProfiles.WordProfil
 
 
 builder.Services.AddDbContext<DictionaryContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DictionaryContextSQL")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsDevelopment() ? "DictionaryDatabaseDevelop" : "DictionaryDatabase")));
 
 builder.Services.AddScoped<WordRepository>();
 builder.Services.AddScoped<PartOfSpeechRepository>();
@@ -41,12 +41,22 @@ using (var scope = app.Services.CreateScope())
     DbInitializer.Initialize(context);
 }
 
-app.UseCors(policy =>
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors(policy =>
     policy.WithOrigins("https://localhost:7179", "https://localhost:5001")
     .AllowAnyMethod()
     .WithHeaders(HeaderNames.ContentType));
+}
+else if (app.Environment.IsDevelopment())
+{
+    app.UseCors(policy =>
+    policy.WithOrigins("https://polwarmdictionary.azurewebsites.net")
+    .AllowAnyMethod()
+    .WithHeaders(HeaderNames.ContentType));
 
-app.UseHttpsRedirection();
+    app.UseHttpsRedirection();
+}
 
 
 if (app.Environment.IsDevelopment())
