@@ -18,6 +18,9 @@ namespace DAL
         //     protected override void OnConfiguring(DbContextOptionsBuilder options)
         // => options.UseSqlServer(@"Server=tcp:dictionarydatabase.database.windows.net,1433;Initial Catalog=dictionarydatabase;Persist Security Info=False;User ID={yourid};Password={yourpassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
+        //     protected override void OnConfiguring(DbContextOptionsBuilder options)
+        // => options.UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=dictionary;Trusted_Connection=True;TrustServerCertificate=True");
+
         public DbSet<Word>? Words { get; set; }
         public DbSet<Author>? Authors { get; set; }
         public DbSet<PartOfSpeech>? PartOfSpeeches { get; set; }

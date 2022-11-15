@@ -14,8 +14,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(typeof(ApplicationServices.MapperProfiles.WordProfile));
-// builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
-
 
 builder.Services.AddDbContext<DictionaryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsDevelopment() ? "DictionaryDatabaseDevelop" : "DictionaryDatabase")));
