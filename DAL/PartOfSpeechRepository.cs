@@ -13,8 +13,4 @@ public class PartOfSpeechRepository : Repository<PartOfSpeech>
     {
         return await Items.FirstOrDefaultAsync(i => i.Name == name);
     }
-    public async Task GetItem(int id)
-    {
-
-    }
 }

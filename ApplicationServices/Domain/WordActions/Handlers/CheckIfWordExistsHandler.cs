@@ -1,7 +1,6 @@
 using MediatR;
 using DAL;
 using ApplicationServices.Domain.WordActions.Queries;
-using ApplicationServices.Domain.Models;
 using AutoMapper;
 
 namespace ApplicationServices.Domain.WordActions.Handlers;

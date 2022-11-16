@@ -63,7 +63,6 @@ namespace DAL
                 Author = kuba,
                 PartOfSpeech = noun
             };
-
             var czlek = new Word
             {
                 InWarmian = "Człek",
@@ -71,7 +70,6 @@ namespace DAL
                 Author = kuba,
                 PartOfSpeech = noun
             };
-
             var grubasa = new Word
             {
                 InWarmian = "Grubasa",
@@ -79,7 +77,6 @@ namespace DAL
                 Author = kuba,
                 PartOfSpeech = noun
             };
-
             var ruchelka = new Word
             {
                 InWarmian = "Ruchełka",
@@ -94,7 +91,6 @@ namespace DAL
                 Author = innyKuba,
                 PartOfSpeech = noun
             };
-
             var jerzba = new Word
             {
                 InWarmian = "Jerzba",
@@ -109,7 +105,6 @@ namespace DAL
                 Author = innyKuba,
                 PartOfSpeech = noun
             };
-
             var sztery = new Word
             {
                 InWarmian = "Sztery",
@@ -119,8 +114,6 @@ namespace DAL
             };
             context.AddRange(kruszka, jerzba, chojina, ruchelka, czlek, stryjna, grubasa);
             context.SaveChanges();
-
-
 
             var drzewa = new WordGroup
             {
@@ -133,7 +126,6 @@ namespace DAL
                 Words = new List<Word>() { stryjna }
             };
             context.AddRange(drzewa, rodzina);
-
             context.SaveChanges();
         }
     }

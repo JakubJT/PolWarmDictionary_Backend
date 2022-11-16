@@ -18,7 +18,7 @@ public class GetWordByIdHandler : IRequestHandler<GetWordByIdQuery, (Word Word, 
     public async Task<(Word Word, int? PartOfSpeechId)> Handle(GetWordByIdQuery request, CancellationToken cancellationToken)
     {
         var word = await _wordRepository.GetWordById(request.WordId);
-        if (word == null) return (default(Word), 0);
+        if (word == null) return default;
         return (_mapper.Map<ApplicationServices.Domain.Models.Word>(word), word.PartOfSpeechId);
     }
 }

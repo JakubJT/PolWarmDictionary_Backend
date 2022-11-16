@@ -46,16 +46,15 @@ if (app.Environment.IsDevelopment())
     .AllowAnyMethod()
     .WithHeaders(HeaderNames.ContentType));
 }
-else if (app.Environment.IsDevelopment())
+else if (app.Environment.IsProduction())
 {
     app.UseCors(policy =>
     policy.WithOrigins("https://polwarmdictionary.azurewebsites.net")
     .AllowAnyMethod()
     .WithHeaders(HeaderNames.ContentType));
-
-    app.UseHttpsRedirection();
 }
 
+app.UseHttpsRedirection();
 
 if (app.Environment.IsDevelopment())
 {

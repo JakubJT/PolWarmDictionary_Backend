@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using DAL;
 using MediatR;
 using ApplicationServices.Domain.WordActions.Queries;
 using ApplicationServices.Domain.WordActions.Commands;
 using ApplicationServices.Domain.Models;
-using ApplicationServices.Domain.PartOfSpeechActions.Queries;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 
 namespace WebAPI.Controllers;
 
@@ -70,7 +67,7 @@ public class WordController : ControllerBase
     public async Task<ActionResult<List<Word>>> GetWord(string word, bool translateFromPolish)
     {
         var response = await _mediator.Send(new GetWordQuery() { Word = word, TranslateFromPolish = translateFromPolish });
-        if (response == null) return NoContent();
+        if (response.Count == 0) return NoContent();
         return response;
     }
 

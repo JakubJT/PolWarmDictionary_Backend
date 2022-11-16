@@ -1,8 +1,5 @@
 using MediatR;
-using ApplicationServices;
 using DAL;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using ApplicationServices.Domain.Models;
 using ApplicationServices.Domain.WordActions.Queries;
 using AutoMapper;

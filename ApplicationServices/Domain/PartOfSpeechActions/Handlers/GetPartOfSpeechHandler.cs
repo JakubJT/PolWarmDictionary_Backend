@@ -1,5 +1,4 @@
 using MediatR;
-using ApplicationServices.Domain;
 using DAL;
 using ApplicationServices.Domain.Models;
 using ApplicationServices.Domain.PartOfSpeechActions.Queries;
