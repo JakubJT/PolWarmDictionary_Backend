@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web.Resource;
 using MediatR;
 using ApplicationServices.Domain.WordActions.Queries;
 using ApplicationServices.Domain.WordActions.Commands;
@@ -48,6 +50,8 @@ public class WordController : ControllerBase
 
 
     [HttpGet]
+    [Authorize]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Words>> GetWords(string sortBy, bool ascendingOrder, int pageNumber = 0, int wordsPerPage = 20)
     {
@@ -66,6 +70,7 @@ public class WordController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<List<Word>>> GetWord(string word, bool translateFromPolish)
     {
+        System.Console.WriteLine(User.Identity.Name);
         var response = await _mediator.Send(new GetWordQuery() { Word = word, TranslateFromPolish = translateFromPolish });
         if (response.Count == 0) return NoContent();
         return response;
@@ -81,6 +86,7 @@ public class WordController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CreateWord(Word word)
@@ -99,6 +105,7 @@ public class WordController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -121,6 +128,7 @@ public class WordController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteWord(int wordId)

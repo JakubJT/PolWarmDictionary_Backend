@@ -2,14 +2,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using DAL;
 using MediatR;
-using System.Reflection;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Identity.Web;
 using ApplicationServices.MapperProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 builder.Services.AddControllers();
+builder.Services.AddRazorPages();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,6 +50,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors(policy =>
     policy.WithOrigins("https://localhost:7179", "https://localhost:5001")
     .AllowAnyMethod()
+    .AllowAnyHeader()
     .WithHeaders(HeaderNames.ContentType));
 }
 else if (app.Environment.IsProduction())
@@ -54,8 +61,6 @@ else if (app.Environment.IsProduction())
     .WithHeaders(HeaderNames.ContentType));
 }
 
-app.UseHttpsRedirection();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/error-development");
@@ -65,8 +70,27 @@ else
     app.UseExceptionHandler("/error");
 }
 
+app.UseHttpsRedirection();
+
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseWebAssemblyDebugging();
+// }
+// else
+// {
+//     app.UseExceptionHandler("/Error");
+//     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+//     app.UseHsts();
+// }
+
+// app.UseBlazorFrameworkFiles();
+// app.UseStaticFiles();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
+// app.MapRazorPages();
 app.MapControllers();
+// app.MapFallbackToFile("index.html");
 
 app.Run();

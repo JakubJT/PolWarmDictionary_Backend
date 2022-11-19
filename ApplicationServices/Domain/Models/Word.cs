@@ -7,13 +7,13 @@ public class Word
     [Required]
     [DataType(DataType.Text)]
     [StringLength(16, MinimumLength = 2)]
-    [RegularExpression(@"^[A-ZĄĘÓŃŻŹĆŁ]+[a-ząężźćóńłA-ZĄĘÓŃŻŹĆŁ\s]*$")]
+    [RegularExpression(@"^[A-ZĄĘÓŃŻŹĆŁŚ]+[a-ząężźćóńłśA-ZĄĘÓŃŻŹĆŁŚ\s]*$")]
     public string? InWarmian { get; set; }
 
     [Required]
     [DataType(DataType.Text)]
     [StringLength(16, MinimumLength = 2)]
-    [RegularExpression(@"^[A-ZĄĘÓŃŻŹĆŁ]+[a-ząężźćóńłA-ZĄĘÓŃŻŹĆŁ\s]*$")]
+    [RegularExpression(@"^[A-ZĄĘÓŃŻŹĆŁŚ]+[a-ząężźćóńłśA-ZĄĘÓŃŻŹĆŁŚ\s]*$")]
     public string? InPolish { get; set; }
     public string? PartOfSpeech { get; set; }
     public int PartOfSpeechId { get; set; }
