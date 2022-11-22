@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
+using Microsoft.Extensions.Logging.AzureAppServices;
 using DAL;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Identity.Web;
 using ApplicationServices.MapperProfiles;
 
@@ -13,6 +12,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+
+builder.Logging.AddConfiguration(
+    builder.Configuration.GetSection("Logging"));
+builder.Logging.AddAzureWebAppDiagnostics();
+builder.Services.Configure<AzureFileLoggerOptions>(options =>
+{
+    options.FileName = "azure-diagnostics-";
+    options.FileSizeLimit = 50 * 1024;
+    options.RetainedFileCountLimit = 5;
+});
+builder.Services.Configure<AzureBlobLoggerOptions>(options =>
+{
+    options.BlobName = "log.txt";
+});
 
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
@@ -72,25 +85,9 @@ else
 
 app.UseHttpsRedirection();
 
-// if (app.Environment.IsDevelopment())
-// {
-//     app.UseWebAssemblyDebugging();
-// }
-// else
-// {
-//     app.UseExceptionHandler("/Error");
-//     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-//     app.UseHsts();
-// }
-
-// app.UseBlazorFrameworkFiles();
-// app.UseStaticFiles();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
-// app.MapRazorPages();
 app.MapControllers();
-// app.MapFallbackToFile("index.html");
 
 app.Run();

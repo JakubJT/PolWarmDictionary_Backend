@@ -44,7 +44,7 @@ public class WordController : ControllerBase
     public IActionResult HandleError()
     {
         var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
-        _logger.LogError(exceptionHandlerFeature.Error, "Error");
+        _logger.LogError(exceptionHandlerFeature.Error, $"({DateTime.UtcNow}) ");
         return Problem();
     }
 
@@ -70,7 +70,6 @@ public class WordController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<List<Word>>> GetWord(string word, bool translateFromPolish)
     {
-        System.Console.WriteLine(User.Identity.Name);
         var response = await _mediator.Send(new GetWordQuery() { Word = word, TranslateFromPolish = translateFromPolish });
         if (response.Count == 0) return NoContent();
         return response;
