@@ -39,6 +39,7 @@ builder.Services.AddDbContext<DictionaryContext>(options =>
 
 builder.Services.AddScoped<WordRepository>();
 builder.Services.AddScoped<PartOfSpeechRepository>();
+builder.Services.AddScoped<WordGroupRepository>();
 builder.Services.AddAutoMapper(typeof(WordProfile), typeof(PartOfSpeechProfile));
 
 var app = builder.Build();
