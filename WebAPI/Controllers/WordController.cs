@@ -13,45 +13,15 @@ namespace WebAPI.Controllers;
 [Route("[controller]/[action]")]
 public class WordController : ControllerBase
 {
-    private readonly ILogger<WordController> _logger;
     private readonly IMediator _mediator;
 
-    public WordController(ILogger<WordController> logger, IMediator mediator)
+    public WordController(IMediator mediator)
     {
-        _logger = logger;
         _mediator = mediator;
     }
 
-    [Route("/error-development")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public IActionResult HandleErrorDevelopment(
-    [FromServices] IHostEnvironment hostEnvironment)
-    {
-        if (!hostEnvironment.IsDevelopment())
-        {
-            return NotFound();
-        }
-
-        var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
-
-        return Problem(
-            detail: exceptionHandlerFeature.Error.StackTrace,
-            title: exceptionHandlerFeature.Error.Message);
-    }
-
-    [Route("/error")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public IActionResult HandleError()
-    {
-        var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
-        _logger.LogError(exceptionHandlerFeature.Error, $"({DateTime.UtcNow}) ");
-        return Problem();
-    }
-
-
     [HttpGet]
     [Authorize]
-    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Words>> GetWords(string sortBy, bool ascendingOrder, int pageNumber = 0, int wordsPerPage = 20)
     {
@@ -76,6 +46,8 @@ public class WordController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Word>> GetWordById(int wordId)
     {
         var response = await _mediator.Send(new GetWordByIdQuery() { WordId = wordId });

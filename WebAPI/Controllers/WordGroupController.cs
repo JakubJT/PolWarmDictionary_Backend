@@ -14,41 +14,12 @@ namespace WebAPI.Controllers;
 [Route("[controller]/[action]")]
 public class WordGroupController : ControllerBase
 {
-    private readonly ILogger<WordController> _logger;
     private readonly IMediator _mediator;
 
-    public WordGroupController(ILogger<WordController> logger, IMediator mediator)
+    public WordGroupController(IMediator mediator)
     {
-        _logger = logger;
         _mediator = mediator;
     }
-
-    [Route("/error-development")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public IActionResult HandleErrorDevelopment(
-    [FromServices] IHostEnvironment hostEnvironment)
-    {
-        if (!hostEnvironment.IsDevelopment())
-        {
-            return NotFound();
-        }
-
-        var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
-
-        return Problem(
-            detail: exceptionHandlerFeature.Error.StackTrace,
-            title: exceptionHandlerFeature.Error.Message);
-    }
-
-    [Route("/error")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public IActionResult HandleError()
-    {
-        var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
-        _logger.LogError(exceptionHandlerFeature.Error, $"({DateTime.UtcNow}) ");
-        return Problem();
-    }
-
 
     [HttpGet]
     [Authorize]
