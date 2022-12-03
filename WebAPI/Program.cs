@@ -37,6 +37,7 @@ builder.Services.AddMediatR(typeof(ApplicationServices.MapperProfiles.WordProfil
 builder.Services.AddDbContext<DictionaryContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsDevelopment() ? "DictionaryDatabaseDevelop" : "DictionaryDatabase")));
 
+builder.Services.AddSingleton<WebAPI.GraphClient>();
 builder.Services.AddScoped<WordRepository>();
 builder.Services.AddScoped<PartOfSpeechRepository>();
 builder.Services.AddScoped<WordGroupRepository>();

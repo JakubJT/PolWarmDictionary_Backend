@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Identity.Web.Resource;
 using MediatR;
 using ApplicationServices.Domain.WordActions.Queries;
 using ApplicationServices.Domain.WordActions.Commands;
 using ApplicationServices.Domain.Models;
-using Microsoft.AspNetCore.Diagnostics;
 
 namespace WebAPI.Controllers;
 
@@ -14,7 +12,6 @@ namespace WebAPI.Controllers;
 public class WordController : ControllerBase
 {
     private readonly IMediator _mediator;
-
     public WordController(IMediator mediator)
     {
         _mediator = mediator;

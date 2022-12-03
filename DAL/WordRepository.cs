@@ -29,7 +29,7 @@ public class WordRepository : Repository<Word>
                     words = words.OrderBy(w => w.InWarmian);
                     break;
                 case "PartOfSpeech":
-                    words = words.OrderBy(w => w.PartOfSpeech.Name);
+                    words = words.OrderBy(w => w.PartOfSpeech!.Name);
                     break;
             }
         }
@@ -45,7 +45,7 @@ public class WordRepository : Repository<Word>
                     words = words.OrderByDescending(w => w.InWarmian);
                     break;
                 case "PartOfSpeech":
-                    words = words.OrderByDescending(w => w.PartOfSpeech.Name);
+                    words = words.OrderByDescending(w => w.PartOfSpeech!.Name);
                     break;
             }
         }
@@ -60,8 +60,8 @@ public class WordRepository : Repository<Word>
 
     public async Task<List<Word>> GetWord(string word, bool translateFromPolish)
     {
-        if (translateFromPolish) return await Context.Words.Include(w => w.PartOfSpeech).Where(wx => wx.InPolish == word).ToListAsync();
-        else return await Context.Words.Include(w => w.PartOfSpeech).Where(wx => wx.InWarmian == word).ToListAsync();
+        if (translateFromPolish) return await Context.Words!.Include(w => w.PartOfSpeech).Where(wx => wx.InPolish == word).ToListAsync();
+        else return await Context.Words!.Include(w => w.PartOfSpeech).Where(wx => wx.InWarmian == word).ToListAsync();
     }
 
     public async Task<Word> GetWordById(int id)
@@ -71,7 +71,7 @@ public class WordRepository : Repository<Word>
 
     public async Task CreateWord(Word word)
     {
-        Context.Words.Add(word);
+        Context.Words!.Add(word);
         await Context.SaveChangesAsync();
 
     }
@@ -84,13 +84,13 @@ public class WordRepository : Repository<Word>
     public async Task DeleteWord(int wordId)
     {
         var wordToDelete = new Word() { WordId = wordId };
-        Context.Words.Remove(wordToDelete);
+        Context.Words!.Remove(wordToDelete);
         await Context.SaveChangesAsync();
     }
 
     public async Task<bool> CheckIfWordExists(Word word)
     {
-        var wordFromDB = await Context.Words.
+        var wordFromDB = await Context.Words!.
                             SingleOrDefaultAsync(w => w.InPolish == word.InPolish && w.InWarmian == word.InWarmian && w.PartOfSpeechId == word.PartOfSpeechId);
         if (wordFromDB == default) return false;
         else return true;
