@@ -11,9 +11,9 @@ public class WordGroupRepository
         _context = context;
     }
 
-    public async Task<List<WordGroup>> GetAllWordGroups(string userIdentifier)
+    public async Task<List<WordGroup>> GetAllWordGroups(string userADId)
     {
-        var wordGroups = await _context.WordGroups.Where(wg => wg.UserIdentifier == userIdentifier).ToListAsync();
+        var wordGroups = await _context.WordGroups.Where(wg => wg.UserADId == userADId).ToListAsync();
         return wordGroups;
 
     }
@@ -41,18 +41,18 @@ public class WordGroupRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> CheckIfWordGroupExists(string userIdentifier, string wordGroupName)
+    public async Task<bool> CheckIfWordGroupExists(string userADId, string wordGroupName)
     {
         var wordGroup = await _context.WordGroups
-                    .SingleOrDefaultAsync(wg => wg.Name == wordGroupName && wg.UserIdentifier == userIdentifier);
+                    .SingleOrDefaultAsync(wg => wg.Name == wordGroupName && wg.UserADId == userADId);
         if (wordGroup == default) return false;
         return true;
     }
 
-    public async Task<bool> CheckIfUserIsAuthorized(string userIdentifier, int wordGroupId)
+    public async Task<bool> CheckIfUserIsAuthorized(string userADId, int wordGroupId)
     {
         var wordGroup = await _context.WordGroups
-                    .SingleOrDefaultAsync(wg => wg.WordGroupId == wordGroupId && wg.UserIdentifier == userIdentifier);
+                    .SingleOrDefaultAsync(wg => wg.WordGroupId == wordGroupId && wg.UserADId == userADId);
         if (wordGroup == default) return false;
         return true;
     }

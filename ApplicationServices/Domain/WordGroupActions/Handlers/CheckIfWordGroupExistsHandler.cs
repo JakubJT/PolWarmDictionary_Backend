@@ -16,7 +16,7 @@ public class CheckIfWordGroupExistsHandler : IRequestHandler<CheckIfWordGroupExi
     }
     public async Task<bool> Handle(CheckIfWordGroupExistsQuery request, CancellationToken cancellationToken)
     {
-        bool wordAlreadyExists = await _wordGroupRepository.CheckIfWordGroupExists(request.UserIdentifier!, request.WordGroupName!);
+        bool wordAlreadyExists = await _wordGroupRepository.CheckIfWordGroupExists(request.UserADId!, request.WordGroupName!);
         return wordAlreadyExists;
     }
 }

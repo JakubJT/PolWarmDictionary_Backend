@@ -5,6 +5,8 @@ using Microsoft.Identity.Web.Resource;
 using MediatR;
 using ApplicationServices.Domain.WordGroupActions.Queries;
 using ApplicationServices.Domain.WordGroupActions.Commands;
+using ApplicationServices.Domain.UserActions.Queries;
+using ApplicationServices.Domain.UserActions.Commands;
 using ApplicationServices.Domain.Models;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -26,10 +28,10 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<WordGroup>>> GetAllWordGroups()
     {
-        string? userIdentifier = GetUserIdentifier();
+        string? userADId = GetUserADId();
         var response = await _mediator.Send(new GetAllWordGroupsQuery()
         {
-            UserIdentifier = userIdentifier
+            UserADId = userADId
         });
         return response;
     }
@@ -41,10 +43,10 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<WordGroup>> GetWordGroup(int wordGroupId)
     {
-        string? userIdentifier = GetUserIdentifier();
+        string? userADId = GetUserADId();
         var isUserAuthorized = await _mediator.Send(new CheckIfUserIsAuthorizedQuery()
         {
-            UserIdentifier = userIdentifier,
+            UserADId = userADId,
             WordGroupId = wordGroupId
         });
         if (isUserAuthorized == false) return Unauthorized();
@@ -71,10 +73,10 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> EditWordGroup(WordGroup wordGroup)
     {
-        string? userIdentifier = GetUserIdentifier();
+        string? userADId = GetUserADId();
         var isUserAuthorized = await _mediator.Send(new CheckIfUserIsAuthorizedQuery()
         {
-            UserIdentifier = userIdentifier,
+            UserADId = userADId,
             WordGroupId = wordGroup.WordGroupId
         });
         if (isUserAuthorized == false) return Unauthorized();
@@ -93,10 +95,10 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteWordGroup(int wordGroupId)
     {
-        string? userIdentifier = GetUserIdentifier();
+        string? userADId = GetUserADId();
         var isUserAuthorized = await _mediator.Send(new CheckIfUserIsAuthorizedQuery()
         {
-            UserIdentifier = userIdentifier,
+            UserADId = userADId,
             WordGroupId = wordGroupId
         });
         if (isUserAuthorized == false) return Unauthorized();
@@ -114,8 +116,8 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CheckIfWordGroupExists(string wordGroupName)
     {
-        string? userIdentifier = GetUserIdentifier();
-        bool wordGroupAlreadyExists = await _mediator.Send(new CheckIfWordGroupExistsQuery() { UserIdentifier = userIdentifier, WordGroupName = wordGroupName });
+        string? userADId = GetUserADId();
+        bool wordGroupAlreadyExists = await _mediator.Send(new CheckIfWordGroupExistsQuery() { UserADId = userADId, WordGroupName = wordGroupName });
         if (wordGroupAlreadyExists) return Conflict();
         return NoContent();
     }
@@ -125,15 +127,32 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> CheckIfUserIsAuthorized(int wordGroupId)
     {
-        string? userIdentifier = GetUserIdentifier();
+        string? userADId = GetUserADId();
         var isUserAuthorized = await _mediator.Send(new CheckIfUserIsAuthorizedQuery()
         {
-            UserIdentifier = userIdentifier,
+            UserADId = userADId,
             WordGroupId = wordGroupId
         });
         if (isUserAuthorized == false) return Unauthorized();
         return NoContent();
     }
 
-    private string? GetUserIdentifier() => User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    private string GetUserADId() => User.Claims.First(c => c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+
+    private async Task CreateUserIfDoesNotExist()
+    {
+        string? userADId = GetUserADId();
+
+        bool userAlreadyExists = await _mediator.Send(new CheckIfUserExistsQuery()
+        {
+            UserADId = userADId
+        });
+        if (userAlreadyExists == false)
+        {
+            await _mediator.Send(new CreateUserCommand()
+            {
+                UserADId = userADId
+            });
+        }
+    }
 }
