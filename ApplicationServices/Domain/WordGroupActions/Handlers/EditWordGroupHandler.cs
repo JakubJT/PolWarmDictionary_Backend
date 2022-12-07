@@ -17,7 +17,7 @@ public class EditWordGroupHandler : AsyncRequestHandler<EditWordGroupCommand>
 
     protected async override Task Handle(EditWordGroupCommand request, CancellationToken cancellationToken)
     {
-        var dalWordGroup = _mapper.Map<DAL.Models.WordGroup>(request);
+        var dalWordGroup = _mapper.Map<DAL.Models.WordGroup>(request.WordGroup);
         await _wordGroupRepository.EditWordGroup(dalWordGroup);
     }
 }

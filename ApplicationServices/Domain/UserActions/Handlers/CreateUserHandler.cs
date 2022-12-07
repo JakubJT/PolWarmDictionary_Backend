@@ -17,7 +17,7 @@ public class CreateUserHandler : AsyncRequestHandler<CreateUserCommand>
 
     protected async override Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var dalUser = _mapper.Map<DAL.Models.User>(new Domain.Models.User() { UserADId = request.UserADId });
+        var dalUser = _mapper.Map<DAL.Models.User>(request);
         await _userRepository.CreateUser(dalUser);
     }
 }

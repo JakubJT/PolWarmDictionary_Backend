@@ -6,4 +6,5 @@ namespace ApplicationServices.Domain.WordGroupActions.Commands;
 public class CreateWordGroupCommand : IRequest
 {
     public WordGroup? WordGroup { get; set; }
+    public string? UserADId { get; set; }
 }

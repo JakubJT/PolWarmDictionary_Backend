@@ -19,7 +19,7 @@ public class GetAllWordGroupsHandler : IRequestHandler<GetAllWordGroupsQuery, Li
 
     public async Task<List<WordGroup>> Handle(GetAllWordGroupsQuery request, CancellationToken cancellationToken)
     {
-        var wordGroups = await _wordGroupRepository.GetAllWordGroups(request.UserADId);
+        var wordGroups = await _wordGroupRepository.GetAllWordGroups(request.UserADId!);
         var domainWordGroups = _mapper.Map<List<ApplicationServices.Domain.Models.WordGroup>>(wordGroups);
         return domainWordGroups;
     }

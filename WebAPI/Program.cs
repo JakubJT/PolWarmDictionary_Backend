@@ -42,7 +42,7 @@ builder.Services.AddScoped<WordRepository>();
 builder.Services.AddScoped<PartOfSpeechRepository>();
 builder.Services.AddScoped<WordGroupRepository>();
 builder.Services.AddScoped<UserRepository>();
-builder.Services.AddAutoMapper(typeof(WordProfile), typeof(PartOfSpeechProfile));
+builder.Services.AddAutoMapper(typeof(WordProfile), typeof(PartOfSpeechProfile), typeof(WordGroupProfile), typeof(UserProfile));
 
 var app = builder.Build();
 

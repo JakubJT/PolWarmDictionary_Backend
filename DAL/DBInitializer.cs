@@ -9,7 +9,7 @@ namespace DAL
     {
         public static void Initialize(DictionaryContext context)
         {
-            if (context.Words.Any())
+            if (context.Words!.Any())
             {
                 return;
             }
@@ -115,15 +115,24 @@ namespace DAL
             context.AddRange(kruszka, jerzba, chojina, ruchelka, czlek, stryjna, grubasa);
             context.SaveChanges();
 
+            var testUser = new User
+            {
+                UserADId = "f313059e-b368-4a9e-9adc-21f907cc641e"
+            };
+            context.Add(testUser);
+            context.SaveChanges();
+
             var drzewa = new WordGroup
             {
                 Name = "Drzewa",
-                Words = new List<Word>() { kruszka, jerzba, chojina }
+                Words = new List<Word>() { kruszka, jerzba, chojina },
+                UserADId = "f313059e-b368-4a9e-9adc-21f907cc641e"
             };
             var rodzina = new WordGroup
             {
                 Name = "Rodzina",
-                Words = new List<Word>() { stryjna }
+                Words = new List<Word>() { stryjna },
+                UserADId = "f313059e-b368-4a9e-9adc-21f907cc641e"
             };
             context.AddRange(drzewa, rodzina);
             context.SaveChanges();

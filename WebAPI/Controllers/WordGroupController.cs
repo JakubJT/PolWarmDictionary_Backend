@@ -62,7 +62,14 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CreateWordGroup(WordGroup wordGroup)
     {
-        var response = await _mediator.Send(new CreateWordGroupCommand() { WordGroup = wordGroup });
+        await CreateUserIfDoesNotExist();
+        string? userADId = GetUserADId();
+
+        var response = await _mediator.Send(new CreateWordGroupCommand()
+        {
+            WordGroup = wordGroup,
+            UserADId = userADId
+        });
         return NoContent();
     }
 
@@ -117,12 +124,17 @@ public class WordGroupController : ControllerBase
     public async Task<IActionResult> CheckIfWordGroupExists(string wordGroupName)
     {
         string? userADId = GetUserADId();
-        bool wordGroupAlreadyExists = await _mediator.Send(new CheckIfWordGroupExistsQuery() { UserADId = userADId, WordGroupName = wordGroupName });
+        bool wordGroupAlreadyExists = await _mediator.Send(new CheckIfWordGroupExistsQuery()
+        {
+            UserADId = userADId,
+            WordGroupName = wordGroupName
+        });
         if (wordGroupAlreadyExists) return Conflict();
         return NoContent();
     }
 
     [HttpGet]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> CheckIfUserIsAuthorized(int wordGroupId)
@@ -143,16 +155,10 @@ public class WordGroupController : ControllerBase
     {
         string? userADId = GetUserADId();
 
-        bool userAlreadyExists = await _mediator.Send(new CheckIfUserExistsQuery()
-        {
-            UserADId = userADId
-        });
+        bool userAlreadyExists = await _mediator.Send(new CheckIfUserExistsQuery() { UserADId = userADId });
         if (userAlreadyExists == false)
         {
-            await _mediator.Send(new CreateUserCommand()
-            {
-                UserADId = userADId
-            });
+            await _mediator.Send(new CreateUserCommand() { UserADId = userADId });
         }
     }
 }

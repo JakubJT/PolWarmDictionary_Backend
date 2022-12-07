@@ -7,17 +7,16 @@ namespace ApplicationServices.Domain.WordGroupActions.Handlers;
 
 public class CheckIfUserIsAuthorizedHandler : IRequestHandler<CheckIfUserIsAuthorizedQuery, bool>
 {
-    private readonly WordRepository _wordRepository;
+    private readonly WordGroupRepository _wordGroupRepository;
     private readonly IMapper _mapper;
-    public CheckIfUserIsAuthorizedHandler(WordRepository wordRepository, IMapper mapper)
+    public CheckIfUserIsAuthorizedHandler(WordGroupRepository wordGroupRepository, IMapper mapper)
     {
-        _wordRepository = wordRepository;
+        _wordGroupRepository = wordGroupRepository;
         _mapper = mapper;
     }
     public async Task<bool> Handle(CheckIfUserIsAuthorizedQuery request, CancellationToken cancellationToken)
     {
-        var dalWord = _mapper.Map<DAL.Models.Word>(request);
-        bool wordAlreadyExists = await _wordRepository.CheckIfWordExists(dalWord);
-        return wordAlreadyExists;
+        bool userIsAuthorized = await _wordGroupRepository.CheckIfUserIsAuthorized(request.UserADId!, request.WordGroupId);
+        return userIsAuthorized;
     }
 }
