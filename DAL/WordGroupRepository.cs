@@ -13,7 +13,7 @@ public class WordGroupRepository
 
     public async Task<List<WordGroup>> GetAllWordGroups(string userADId)
     {
-        var wordGroups = await _context.WordGroups!.Where(wg => wg.UserADId == userADId).ToListAsync();
+        var wordGroups = await _context.WordGroups!.Include(wg => wg.Words).Where(wg => wg.UserADId == userADId).ToListAsync();
         return wordGroups;
 
     }

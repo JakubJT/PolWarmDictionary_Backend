@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using DAL.Models;
 
@@ -37,7 +38,12 @@ namespace DAL
             modelBuilder.Entity<WordGroup>()
                 .HasOne(s => s.User)
                 .WithMany(c => c.WordGroups)
-                .HasPrincipalKey(c => c.UserADId);
+                .HasForeignKey(c => c.UserADId);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.WordGroups)
+                .WithOne(wg => wg.User)
+                .HasPrincipalKey(u => u.UserADId);
         }
     }
 }
