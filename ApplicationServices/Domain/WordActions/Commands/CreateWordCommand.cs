@@ -5,5 +5,5 @@ namespace ApplicationServices.Domain.WordActions.Commands;
 
 public class CreateWordCommand : IRequest
 {
-    public Word Word { get; set; }
+    public Word? Word { get; set; }
 }

@@ -20,7 +20,8 @@ public class WordGroupRepository
 
     public async Task<WordGroup> GetWordGroup(int wordGroupId)
     {
-        return await _context.WordGroups!.AsNoTracking().FirstOrDefaultAsync(wg => wg.WordGroupId == wordGroupId);
+        var wordGroup = await _context.WordGroups!.AsNoTracking().FirstOrDefaultAsync(wg => wg.WordGroupId == wordGroupId);
+        return wordGroup!;
     }
 
     public async Task CreateWordGroup(WordGroup wordGroup)

@@ -18,7 +18,7 @@ public class GetWordGroupHandler : IRequestHandler<GetWordGroupQuery, WordGroup>
     public async Task<WordGroup> Handle(GetWordGroupQuery request, CancellationToken cancellationToken)
     {
         var word = await _wordGroupRepository.GetWordGroup(request.WordGroupId);
-        if (word == null) return default;
+        if (word == null) return default!;
         return _mapper.Map<ApplicationServices.Domain.Models.WordGroup>(word);
     }
 }

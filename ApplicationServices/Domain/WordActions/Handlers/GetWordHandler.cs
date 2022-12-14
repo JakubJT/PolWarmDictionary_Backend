@@ -19,7 +19,7 @@ public class GetWordHandler : IRequestHandler<GetWordQuery, List<Word>>
 
     public async Task<List<Word>> Handle(GetWordQuery request, CancellationToken cancellationToken)
     {
-        var translationOfWord = await _wordRepository.GetWord(request.Word, request.TranslateFromPolish);
+        var translationOfWord = await _wordRepository.GetWord(request.Word!, request.TranslateFromPolish);
         return _mapper.Map<List<ApplicationServices.Domain.Models.Word>>(translationOfWord);
     }
 }

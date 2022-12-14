@@ -66,7 +66,8 @@ public class WordRepository : Repository<Word>
 
     public async Task<Word> GetWordById(int id)
     {
-        return await Context.Words.AsNoTracking().Include(w => w.PartOfSpeech).FirstOrDefaultAsync(wx => wx.WordId == id);
+        var word = await Context.Words!.AsNoTracking().Include(w => w.PartOfSpeech).FirstOrDefaultAsync(wx => wx.WordId == id);
+        return word!;
     }
 
     public async Task CreateWord(Word word)
