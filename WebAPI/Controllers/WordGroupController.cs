@@ -80,6 +80,9 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> EditWordGroup(WordGroup wordGroup)
     {
+        var wordGroupFromDB = await _mediator.Send(new GetWordGroupQuery() { WordGroupId = wordGroup.WordGroupId });
+        if (wordGroupFromDB == null) return NotFound();
+
         string? userADId = GetUserADId();
         var isUserAuthorized = await _mediator.Send(new CheckIfUserIsAuthorizedQuery()
         {
@@ -87,9 +90,6 @@ public class WordGroupController : ControllerBase
             WordGroupId = wordGroup.WordGroupId
         });
         if (isUserAuthorized == false) return Unauthorized();
-
-        var wordGroupFromDB = await _mediator.Send(new GetWordGroupQuery() { WordGroupId = wordGroup.WordGroupId });
-        if (wordGroupFromDB == null) return NotFound();
 
         var response = await _mediator.Send(new EditWordGroupCommand() { WordGroup = wordGroup });
         return NoContent();
@@ -102,6 +102,9 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteWordGroup(int wordGroupId)
     {
+        var wordGroupFromDB = await _mediator.Send(new GetWordGroupQuery() { WordGroupId = wordGroupId });
+        if (wordGroupFromDB == null) return NotFound();
+
         string? userADId = GetUserADId();
         var isUserAuthorized = await _mediator.Send(new CheckIfUserIsAuthorizedQuery()
         {
@@ -109,9 +112,6 @@ public class WordGroupController : ControllerBase
             WordGroupId = wordGroupId
         });
         if (isUserAuthorized == false) return Unauthorized();
-
-        var wordGroupFromDB = await _mediator.Send(new GetWordGroupQuery() { WordGroupId = wordGroupId });
-        if (wordGroupFromDB == null) return NotFound();
 
         var response = await _mediator.Send(new DeleteWordGroupCommand() { WordGroupId = wordGroupId });
         return NoContent();
