@@ -98,12 +98,15 @@ public class WordGroupController : ControllerBase
         });
         if (isUserAuthorized == false) return Unauthorized();
 
-        bool wordGroupAlreadyExists = await _mediator.Send(new CheckIfWordGroupExistsQuery()
+        if (wordGroupFromDB.Name != wordGroup.Name)
         {
-            UserADId = userADId,
-            WordGroupName = wordGroup.Name
-        });
-        if (wordGroupAlreadyExists) return Conflict();
+            bool wordGroupAlreadyExists = await _mediator.Send(new CheckIfWordGroupExistsQuery()
+            {
+                UserADId = userADId,
+                WordGroupName = wordGroup.Name
+            });
+            if (wordGroupAlreadyExists) return Conflict();
+        }
 
         var response = await _mediator.Send(new EditWordGroupCommand() { WordGroup = wordGroup });
         return NoContent();
