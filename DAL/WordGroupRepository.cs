@@ -32,6 +32,10 @@ public class WordGroupRepository
 
     public async Task CreateWordGroup(WordGroup wordGroup)
     {
+        foreach (var word in wordGroup.Words)
+        {
+            _context.Attach(word);
+        }
         _context.Add(wordGroup);
         await _context.SaveChangesAsync();
     }

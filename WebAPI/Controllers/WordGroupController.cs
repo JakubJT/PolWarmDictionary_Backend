@@ -39,8 +39,8 @@ public class WordGroupController : ControllerBase
     [HttpGet]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<WordGroup>> GetWordGroup(int wordGroupId)
     {
         string? userADId = GetUserADId();
@@ -62,8 +62,14 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CreateWordGroup(WordGroup wordGroup)
     {
-        await CreateUserIfDoesNotExist();
         string? userADId = GetUserADId();
+
+        bool wordGroupAlreadyExists = await _mediator.Send(new CheckIfWordGroupExistsQuery()
+        {
+            UserADId = userADId,
+            WordGroupName = wordGroup.Name
+        });
+        if (wordGroupAlreadyExists) return Conflict();
 
         var response = await _mediator.Send(new CreateWordGroupCommand()
         {
@@ -76,6 +82,7 @@ public class WordGroupController : ControllerBase
     [HttpPost]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> EditWordGroup(WordGroup wordGroup)
@@ -91,6 +98,13 @@ public class WordGroupController : ControllerBase
         });
         if (isUserAuthorized == false) return Unauthorized();
 
+        bool wordGroupAlreadyExists = await _mediator.Send(new CheckIfWordGroupExistsQuery()
+        {
+            UserADId = userADId,
+            WordGroupName = wordGroup.Name
+        });
+        if (wordGroupAlreadyExists) return Conflict();
+
         var response = await _mediator.Send(new EditWordGroupCommand() { WordGroup = wordGroup });
         return NoContent();
 
@@ -99,6 +113,7 @@ public class WordGroupController : ControllerBase
     [HttpDelete]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteWordGroup(int wordGroupId)
     {
@@ -119,8 +134,8 @@ public class WordGroupController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CheckIfWordGroupExists(string wordGroupName)
     {
         string? userADId = GetUserADId();
@@ -135,8 +150,8 @@ public class WordGroupController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CheckIfUserIsAuthorized(int wordGroupId)
     {
         string? userADId = GetUserADId();
