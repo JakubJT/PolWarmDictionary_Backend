@@ -1,8 +1,8 @@
 namespace ApplicationServices.Domain.Models;
 public class User
 {
-    public int UserId { get; set; }
-    public string? UserADId { get; set; }
-
-    public List<WordGroup>? WordGroups { get; set; }
+    public string? Name { get; set; }
+    public string? Email { get; set; }
+    public string? ADId { get; set; }
+    public int NumberOfWordGroups { get; set; }
 }

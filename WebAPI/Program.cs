@@ -35,7 +35,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(typeof(ApplicationServices.MapperProfiles.WordProfile));
 
 builder.Services.AddDbContext<DictionaryContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString(builder.Environment.IsDevelopment() ? "DictionaryDatabaseDevelop" : "DictionaryDatabase")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DictionaryDatabase")));
 
 builder.Services.AddSingleton<WebAPI.GraphClient>();
 builder.Services.AddScoped<WordRepository>();

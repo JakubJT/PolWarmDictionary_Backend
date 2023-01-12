@@ -11,17 +11,25 @@ public class UserRepository
         _context = context;
     }
 
-    // public async Task<List<WordGroup>> GetAllWordGroups(string userADId)
-    // {
-    //     var wordGroups = await _context.WordGroups.Where(wg => wg.UserADId == userADId).ToListAsync();
-    //     return wordGroups;
+    public async Task<List<User>> GetAllUsers()
+    {
+        var users = await _context.Users!
+        .AsNoTracking()
+        .Include(u => u.WordGroups)
+        .ToListAsync();
 
-    // }
+        return users;
 
-    // public async Task<WordGroup> GetWordGroup(int wordGroupId)
-    // {
-    //     return await _context.WordGroups.AsNoTracking().FirstOrDefaultAsync(wg => wg.WordGroupId == wordGroupId);
-    // }
+    }
+
+    public async Task<User> GetUserById(int userId)
+    {
+        var user = await _context.Users!
+        .AsNoTracking()
+        .FirstOrDefaultAsync(u => u.UserId == userId);
+
+        return user;
+    }
 
     public async Task CreateUser(User user)
     {

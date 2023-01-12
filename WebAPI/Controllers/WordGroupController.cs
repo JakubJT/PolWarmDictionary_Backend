@@ -1,14 +1,11 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Identity.Web.Resource;
 using MediatR;
 using ApplicationServices.Domain.WordGroupActions.Queries;
 using ApplicationServices.Domain.WordGroupActions.Commands;
 using ApplicationServices.Domain.UserActions.Queries;
 using ApplicationServices.Domain.UserActions.Commands;
 using ApplicationServices.Domain.Models;
-using Microsoft.AspNetCore.Diagnostics;
 
 namespace WebAPI.Controllers;
 
@@ -62,6 +59,8 @@ public class WordGroupController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CreateWordGroup(WordGroup wordGroup)
     {
+        await CreateUserIfDoesNotExist();
+
         string? userADId = GetUserADId();
 
         bool wordGroupAlreadyExists = await _mediator.Send(new CheckIfWordGroupExistsQuery()
