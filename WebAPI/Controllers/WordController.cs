@@ -20,6 +20,7 @@ public class WordController : ControllerBase
     [HttpGet]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Words>> GetWords(string sortBy, bool ascendingOrder, int pageNumber = 0, int wordsPerPage = 20)
     {
         var response = await _mediator.Send(new GetWordsQuery()
@@ -29,6 +30,7 @@ public class WordController : ControllerBase
             PageNumber = pageNumber,
             WordsPerPage = wordsPerPage
         });
+        if (response.WordList!.Count() == 0) return NoContent();
         return response;
     }
 
@@ -44,7 +46,7 @@ public class WordController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Word>> GetWordById(int wordId)
     {
         var response = await _mediator.Send(new GetWordByIdQuery() { WordId = wordId });

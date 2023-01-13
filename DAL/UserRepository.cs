@@ -19,7 +19,6 @@ public class UserRepository
         .ToListAsync();
 
         return users;
-
     }
 
     public async Task<User> GetUserById(int userId)
@@ -28,7 +27,7 @@ public class UserRepository
         .AsNoTracking()
         .FirstOrDefaultAsync(u => u.UserId == userId);
 
-        return user;
+        return user!;
     }
 
     public async Task CreateUser(User user)
@@ -36,18 +35,6 @@ public class UserRepository
         _context.Add(user);
         await _context.SaveChangesAsync();
     }
-    // public async Task EditWordGroup(WordGroup wordGroup)
-    // {
-    //     _context.Update(wordGroup);
-    //     await _context.SaveChangesAsync();
-    // }
-
-    // public async Task DeleteWordGroup(int wordGroupId)
-    // {
-    //     var wordGroupToDelete = new WordGroup() { WordGroupId = wordGroupId };
-    //     _context.WordGroups.Remove(wordGroupToDelete);
-    //     await _context.SaveChangesAsync();
-    // }
 
     public async Task<bool> CheckIfUserExists(string userADId)
     {

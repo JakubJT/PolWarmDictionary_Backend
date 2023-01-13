@@ -22,6 +22,7 @@ public class WordGroupController : ControllerBase
 
     [HttpGet]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<WordGroup>>> GetAllWordGroups()
     {
@@ -30,13 +31,14 @@ public class WordGroupController : ControllerBase
         {
             UserADId = userADId
         });
+        if (response.Count() == 0) return NoContent();
         return response;
     }
 
     [HttpGet]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<WordGroup>> GetWordGroup(int wordGroupId)
     {
@@ -49,7 +51,7 @@ public class WordGroupController : ControllerBase
         if (isUserAuthorized == false) return Unauthorized();
 
         var wordGroupFromDB = await _mediator.Send(new GetWordGroupQuery() { WordGroupId = wordGroupId });
-        if (wordGroupFromDB == null) return NoContent();
+        if (wordGroupFromDB == null) return NotFound();
         return wordGroupFromDB;
     }
 

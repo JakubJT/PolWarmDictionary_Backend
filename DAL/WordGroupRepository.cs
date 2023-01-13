@@ -32,13 +32,14 @@ public class WordGroupRepository
 
     public async Task CreateWordGroup(WordGroup wordGroup)
     {
-        foreach (var word in wordGroup.Words)
+        foreach (var word in wordGroup.Words!)
         {
             _context.Attach(word);
         }
         _context.Add(wordGroup);
         await _context.SaveChangesAsync();
     }
+
     public async Task EditWordGroup(WordGroup wordGroup)
     {
         using (var transaction = _context.Database.BeginTransaction())
@@ -50,16 +51,16 @@ public class WordGroupRepository
 
             _context.Entry(wordGroupFromDB!).CurrentValues.SetValues(wordGroup);
 
-            foreach (var word in wordGroup.Words)
+            foreach (var word in wordGroup.Words!)
             {
-                var wordFromDB = wordGroupFromDB.Words
+                var wordFromDB = wordGroupFromDB!.Words!
                     .FirstOrDefault(w => w.WordId == word.WordId);
-                if (wordFromDB == null) wordGroupFromDB.Words.Add(word);
+                if (wordFromDB == null) wordGroupFromDB!.Words!.Add(word);
                 else _context.Entry(wordFromDB).CurrentValues.SetValues(word);
             }
             _context.SaveChanges();
 
-            foreach (var word in wordGroupFromDB.Words)
+            foreach (var word in wordGroupFromDB!.Words!)
             {
                 if (!wordGroup.Words.Any(w => w.WordId == word.WordId))
                 {
