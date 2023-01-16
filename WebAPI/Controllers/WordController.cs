@@ -19,6 +19,7 @@ public class WordController : ControllerBase
 
     [HttpGet]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult<Words>> GetWords(string sortBy, bool ascendingOrder, int pageNumber = 0, int wordsPerPage = 20)
@@ -52,11 +53,11 @@ public class WordController : ControllerBase
         var response = await _mediator.Send(new GetWordByIdQuery() { WordId = wordId });
         if (response.Word == null) return NotFound();
         return response.Word;
-
     }
 
     [HttpPost]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CreateWord(Word word)
@@ -76,6 +77,7 @@ public class WordController : ControllerBase
 
     [HttpPost]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -99,6 +101,7 @@ public class WordController : ControllerBase
 
     [HttpDelete]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteWord(int wordId)

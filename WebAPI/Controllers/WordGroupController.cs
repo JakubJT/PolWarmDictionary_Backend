@@ -22,6 +22,7 @@ public class WordGroupController : ControllerBase
 
     [HttpGet]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<WordGroup>>> GetAllWordGroups()
@@ -57,6 +58,7 @@ public class WordGroupController : ControllerBase
 
     [HttpPost]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CreateWordGroup(WordGroup wordGroup)
@@ -138,6 +140,7 @@ public class WordGroupController : ControllerBase
 
     [HttpGet]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> CheckIfWordGroupExists(string wordGroupName)

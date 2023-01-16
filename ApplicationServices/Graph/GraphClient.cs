@@ -1,9 +1,10 @@
 using Microsoft.Graph;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
 using Azure.Identity;
 
-namespace WebAPI;
+namespace ApplicationServices.Graph;
 
 public class GraphClient
 {
