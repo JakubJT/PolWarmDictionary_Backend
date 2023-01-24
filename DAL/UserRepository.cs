@@ -44,4 +44,12 @@ public class UserRepository
         return true;
     }
 
+    public async Task<bool> CheckIfUserIsAdmin(string userADId)
+    {
+        var user = await _context.Users!
+            .SingleOrDefaultAsync(u => u.UserADId == userADId);
+        bool isAdmin = user!.IsAdmin;
+        return isAdmin;
+    }
+
 }

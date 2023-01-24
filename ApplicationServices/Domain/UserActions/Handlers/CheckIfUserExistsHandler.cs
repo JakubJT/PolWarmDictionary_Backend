@@ -8,11 +8,9 @@ namespace ApplicationServices.Domain.UserActions.Handlers;
 public class CheckIfUserExistsHandler : IRequestHandler<CheckIfUserExistsQuery, bool>
 {
     private readonly UserRepository _userRepository;
-    private readonly IMapper _mapper;
-    public CheckIfUserExistsHandler(UserRepository userRepository, IMapper mapper)
+    public CheckIfUserExistsHandler(UserRepository userRepository)
     {
         _userRepository = userRepository;
-        _mapper = mapper;
     }
     public async Task<bool> Handle(CheckIfUserExistsQuery request, CancellationToken cancellationToken)
     {

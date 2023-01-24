@@ -25,10 +25,41 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<User>>> GetAllUsers()
     {
+        string userADId = GetUserADId();
+
+        bool userExists = await _mediator.Send(new CheckIfUserExistsQuery() { UserADId = userADId });
+        if (userExists == false) return Unauthorized();
+        else
+        {
+            bool isUserAdmin = await _mediator.Send(new CheckIfUserIsAdminQuery() { UserADId = userADId });
+            if (isUserAdmin == false) return Unauthorized();
+        }
+
         var users = await _mediator.Send(new GetAllUsersQuery());
         if (users.Count() == 0) return NoContent();
 
         users = await _mediator.Send(new Graph.UserActions.Queries.GetUsersQuery() { UsersFromDB = users });
         return users;
     }
+
+    [HttpGet]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<bool>> CheckIfUserIsAdmin()
+    {
+        string userADId = GetUserADId();
+
+        bool userExists = await _mediator.Send(new CheckIfUserExistsQuery() { UserADId = userADId });
+        if (userExists == false) return false;
+        else
+        {
+            bool isUserAdmin = await _mediator.Send(new CheckIfUserIsAdminQuery() { UserADId = userADId });
+            if (isUserAdmin == false) return false;
+            else return true;
+        }
+
+    }
+
+    private string GetUserADId() => User.Claims.First(c => c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
 }

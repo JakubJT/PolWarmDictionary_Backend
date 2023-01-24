@@ -3,15 +3,17 @@ using DAL.Models;
 
 namespace DAL;
 
-public class WordRepository : Repository<Word>
+public class WordRepository
 {
-    public WordRepository(DictionaryContext context) : base(context)
+    private readonly DictionaryContext _context;
+    public WordRepository(DictionaryContext context)
     {
+        _context = context;
     }
 
     public async Task<(List<Word> Words, int NumbeOfPages)> GetWords(bool ascendingOrder, string sortBy, int pageNumber, int wordsPerPage)
     {
-        IQueryable<Word> words = from w in Context.Words
+        IQueryable<Word> words = from w in _context.Words
                                  select w;
         int wordsCount = await words.CountAsync();
         int numbeOfPages;
@@ -60,38 +62,38 @@ public class WordRepository : Repository<Word>
 
     public async Task<List<Word>> GetWord(string word, bool translateFromPolish)
     {
-        if (translateFromPolish) return await Context.Words!.Include(w => w.PartOfSpeech).Where(wx => wx.InPolish == word).ToListAsync();
-        else return await Context.Words!.Include(w => w.PartOfSpeech).Where(wx => wx.InWarmian == word).ToListAsync();
+        if (translateFromPolish) return await _context.Words!.Include(w => w.PartOfSpeech).Where(wx => wx.InPolish == word).ToListAsync();
+        else return await _context.Words!.Include(w => w.PartOfSpeech).Where(wx => wx.InWarmian == word).ToListAsync();
     }
 
     public async Task<Word> GetWordById(int id)
     {
-        var word = await Context.Words!.AsNoTracking().Include(w => w.PartOfSpeech).FirstOrDefaultAsync(wx => wx.WordId == id);
+        var word = await _context.Words!.AsNoTracking().Include(w => w.PartOfSpeech).FirstOrDefaultAsync(wx => wx.WordId == id);
         return word!;
     }
 
     public async Task CreateWord(Word word)
     {
-        Context.Words!.Add(word);
-        await Context.SaveChangesAsync();
+        _context.Words!.Add(word);
+        await _context.SaveChangesAsync();
 
     }
     public async Task EditWord(Word word)
     {
-        Context.Update(word);
-        await Context.SaveChangesAsync();
+        _context.Update(word);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteWord(int wordId)
     {
         var wordToDelete = new Word() { WordId = wordId };
-        Context.Words!.Remove(wordToDelete);
-        await Context.SaveChangesAsync();
+        _context.Words!.Remove(wordToDelete);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<bool> CheckIfWordExists(Word word)
     {
-        var wordFromDB = await Context.Words!.
+        var wordFromDB = await _context.Words!.
                             SingleOrDefaultAsync(w => w.InPolish == word.InPolish && w.InWarmian == word.InWarmian && w.PartOfSpeechId == word.PartOfSpeechId);
         if (wordFromDB == default) return false;
         else return true;
