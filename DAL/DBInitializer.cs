@@ -117,7 +117,7 @@ namespace DAL
 
             var testUser = new User
             {
-                UserADId = "f313059e-b368-4a9e-9adc-21f907cc641e"
+                UserADId = "44c4f547-65c1-4083-816f-4aa74e7538ed"
             };
             context.Add(testUser);
             context.SaveChanges();
@@ -126,13 +126,13 @@ namespace DAL
             {
                 Name = "Drzewa",
                 Words = new List<Word>() { kruszka, jerzba, chojina },
-                UserADId = "f313059e-b368-4a9e-9adc-21f907cc641e"
+                UserADId = "44c4f547-65c1-4083-816f-4aa74e7538ed"
             };
             var rodzina = new WordGroup
             {
                 Name = "Rodzina",
                 Words = new List<Word>() { stryjna },
-                UserADId = "f313059e-b368-4a9e-9adc-21f907cc641e"
+                UserADId = "44c4f547-65c1-4083-816f-4aa74e7538ed"
             };
             context.AddRange(drzewa, rodzina);
             context.SaveChanges();
