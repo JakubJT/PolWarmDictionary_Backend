@@ -12,29 +12,25 @@ public class ErrorController : ControllerBase
         _logger = logger;
     }
 
-    [Route("/error-development")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public IActionResult HandleErrorDevelopment(
-    [FromServices] IHostEnvironment hostEnvironment)
-    {
-        if (!hostEnvironment.IsDevelopment())
-        {
-            return NotFound();
-        }
-
-        var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
-
-        return Problem(
-            detail: exceptionHandlerFeature.Error.StackTrace,
-            title: exceptionHandlerFeature.Error.Message);
-    }
-
     [Route("/error")]
     [ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult HandleError()
     {
-        var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
-        _logger.LogError(exceptionHandlerFeature.Error, $"({DateTime.UtcNow}) ");
+        var exceptionHandler = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
+        _logger.LogError(exceptionHandler.Error, $"({DateTime.UtcNow}) ");
         return Problem();
+    }
+
+    [Route("/error-indevelopment")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public IActionResult HandleErrorInDevelopment(
+    [FromServices] IHostEnvironment hostEnvironment)
+    {
+        if (!hostEnvironment.IsDevelopment()) return NotFound();
+
+        var exceptionHandler = HttpContext.Features.Get<IExceptionHandlerFeature>()!;
+        string? stackTrace = exceptionHandler.Error.StackTrace?.TrimStart();
+        string? message = exceptionHandler.Error.Message;
+        return Problem(detail: stackTrace, title: message);
     }
 }

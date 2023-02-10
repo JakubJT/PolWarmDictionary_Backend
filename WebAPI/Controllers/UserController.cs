@@ -39,7 +39,7 @@ public class UserController : ControllerBase
         if (users.Count() == 0) return NoContent();
 
         users = await _mediator.Send(new Graph.UserActions.Queries.GetUsersQuery() { UsersFromDB = users });
-        return users;
+        return Ok(users);
     }
 
     [HttpGet]
@@ -51,12 +51,12 @@ public class UserController : ControllerBase
         string userADId = GetUserADId();
 
         bool userExists = await _mediator.Send(new CheckIfUserExistsQuery() { UserADId = userADId });
-        if (userExists == false) return false;
+        if (userExists == false) return Ok(false);
         else
         {
             bool isUserAdmin = await _mediator.Send(new CheckIfUserIsAdminQuery() { UserADId = userADId });
-            if (isUserAdmin == false) return false;
-            else return true;
+            if (isUserAdmin == false) return Ok(false);
+            else return Ok(true);
         }
 
     }

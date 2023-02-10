@@ -55,7 +55,7 @@ WordGroupController – kontroler do obsługi żądań dotyczących grup słów 
 UserController - kontroler do obsługi żądań dotyczących użytkowników.
 - Endpointy GET:
 
-	-/user/getallusers - endpoint zwraca wszystkich użytkowników z bazy danych wraz z informacją o liczbie posiadanych przez nich grup słów (zwraca listę obiektów User).
+	- /user/getallusers - endpoint zwraca wszystkich użytkowników z bazy danych wraz z informacją o liczbie posiadanych przez nich grup słów (zwraca listę obiektów User).
 
 
 English version
@@ -113,4 +113,4 @@ WordGroupController – a controller for handling requests concnerning word grou
 UserController - a controller to handle requests concerning users.
 - GET endpoints:
 
--/user/getallusers - endpoint returns all users from the database with information about the number of groups of words they have (returns a list of User objects).
+  - /user/getallusers - endpoint returns all users from the database with information about the number of groups of words they have (returns a list of User objects).

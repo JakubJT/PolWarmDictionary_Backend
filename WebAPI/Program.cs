@@ -16,16 +16,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Logging.AddConfiguration(
     builder.Configuration.GetSection("Logging"));
 builder.Logging.AddAzureWebAppDiagnostics();
-builder.Services.Configure<AzureFileLoggerOptions>(options =>
-{
-    options.FileName = "azure-diagnostics-";
-    options.FileSizeLimit = 50 * 1024;
-    options.RetainedFileCountLimit = 5;
-});
-builder.Services.Configure<AzureBlobLoggerOptions>(options =>
-{
-    options.BlobName = "log.txt";
-});
 
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
@@ -78,7 +68,7 @@ else if (app.Environment.IsProduction())
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/error-development");
+    app.UseExceptionHandler("/error-indevelopment");
 }
 else
 {
