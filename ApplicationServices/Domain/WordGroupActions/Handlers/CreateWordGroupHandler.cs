@@ -5,7 +5,7 @@ using AutoMapper;
 
 namespace ApplicationServices.Domain.WordGroupActions.Handlers;
 
-public class CreateWordGroupHandler : AsyncRequestHandler<CreateWordGroupCommand>
+public class CreateWordGroupHandler : IRequestHandler<CreateWordGroupCommand>
 {
     private readonly WordGroupRepository _wordGroupRepository;
     private readonly IMapper _mapper;
@@ -16,7 +16,7 @@ public class CreateWordGroupHandler : AsyncRequestHandler<CreateWordGroupCommand
         _mapper = mapper;
     }
 
-    protected async override Task Handle(CreateWordGroupCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateWordGroupCommand request, CancellationToken cancellationToken)
     {
         var dalWordGroup = _mapper.Map<DAL.Models.WordGroup>(request);
         await _wordGroupRepository.CreateWordGroup(dalWordGroup);

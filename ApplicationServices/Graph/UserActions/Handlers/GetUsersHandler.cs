@@ -24,9 +24,10 @@ public class GetUsersHandler : IRequestHandler<GetUsersQuery, List<User>>
         foreach (var user in users!)
         {
             var userAD = await graphClient.Users[$"{user.ADId}"]
-                .Request()
-                .Select("displayName,mail")
-                .GetAsync();
+                .GetAsync((requestConfiguration) =>
+                    {
+                        requestConfiguration.QueryParameters.Select = new string[] { "displayName", "mail" };
+                    });
 
             user.Email = userAD.Mail;
             user.Name = userAD.DisplayName;

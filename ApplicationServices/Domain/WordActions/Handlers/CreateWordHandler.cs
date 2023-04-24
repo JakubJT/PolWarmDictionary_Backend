@@ -5,7 +5,7 @@ using AutoMapper;
 
 namespace ApplicationServices.Domain.WordActions.Handlers;
 
-public class CreateWordHandler : AsyncRequestHandler<CreateWordCommand>
+public class CreateWordHandler : IRequestHandler<CreateWordCommand>
 {
     private readonly WordRepository _wordRepository;
     private readonly IMapper _mapper;
@@ -16,7 +16,7 @@ public class CreateWordHandler : AsyncRequestHandler<CreateWordCommand>
         _mapper = mapper;
     }
 
-    protected async override Task Handle(CreateWordCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateWordCommand request, CancellationToken cancellationToken)
     {
         var dalWord = _mapper.Map<DAL.Models.Word>(request);
         await _wordRepository.CreateWord(dalWord);

@@ -5,7 +5,7 @@ using AutoMapper;
 
 namespace ApplicationServices.Domain.WordActions.Handlers;
 
-public class EditWordHandler : AsyncRequestHandler<EditWordCommand>
+public class EditWordHandler : IRequestHandler<EditWordCommand>
 {
     private readonly WordRepository _wordRepository;
     private readonly IMapper _mapper;
@@ -15,7 +15,7 @@ public class EditWordHandler : AsyncRequestHandler<EditWordCommand>
         _mapper = mapper;
     }
 
-    protected async override Task Handle(EditWordCommand request, CancellationToken cancellationToken)
+    public async Task Handle(EditWordCommand request, CancellationToken cancellationToken)
     {
         var dalWord = _mapper.Map<DAL.Models.Word>(request);
         await _wordRepository.EditWord(dalWord);

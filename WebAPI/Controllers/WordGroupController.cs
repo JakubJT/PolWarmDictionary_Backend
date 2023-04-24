@@ -74,7 +74,7 @@ public class WordGroupController : ControllerBase
         });
         if (wordGroupAlreadyExists) return Conflict();
 
-        var response = await _mediator.Send(new CreateWordGroupCommand()
+        await _mediator.Send(new CreateWordGroupCommand()
         {
             WordGroup = wordGroup,
             UserADId = userADId
@@ -111,7 +111,7 @@ public class WordGroupController : ControllerBase
             if (wordGroupAlreadyExists) return Conflict();
         }
 
-        var response = await _mediator.Send(new EditWordGroupCommand() { WordGroup = wordGroup });
+        await _mediator.Send(new EditWordGroupCommand() { WordGroup = wordGroup });
         return NoContent();
 
     }
@@ -134,7 +134,7 @@ public class WordGroupController : ControllerBase
         });
         if (isUserAuthorized == false) return Unauthorized();
 
-        var response = await _mediator.Send(new DeleteWordGroupCommand() { WordGroupId = wordGroupId });
+        await _mediator.Send(new DeleteWordGroupCommand() { WordGroupId = wordGroupId });
         return NoContent();
     }
 

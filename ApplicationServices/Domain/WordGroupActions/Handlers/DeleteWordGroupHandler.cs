@@ -4,14 +4,14 @@ using ApplicationServices.Domain.WordGroupActions.Commands;
 
 namespace ApplicationServices.Domain.WordGroupActions.Handlers;
 
-public class DeleteWordGroupHandler : AsyncRequestHandler<DeleteWordGroupCommand>
+public class DeleteWordGroupHandler : IRequestHandler<DeleteWordGroupCommand>
 {
     private readonly WordGroupRepository _wordGroupRepository;
     public DeleteWordGroupHandler(WordGroupRepository wordGroupRepository)
     {
         _wordGroupRepository = wordGroupRepository;
     }
-    protected async override Task Handle(DeleteWordGroupCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteWordGroupCommand request, CancellationToken cancellationToken)
     {
         await _wordGroupRepository.DeleteWordGroup(request.WordGroupId);
     }

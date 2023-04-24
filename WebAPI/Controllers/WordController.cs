@@ -70,7 +70,7 @@ public class WordController : ControllerBase
         }
         else
         {
-            var response = await _mediator.Send(new CreateWordCommand() { Word = word });
+            await _mediator.Send(new CreateWordCommand() { Word = word });
             return NoContent();
         }
     }
@@ -94,7 +94,7 @@ public class WordController : ControllerBase
         }
         else
         {
-            var response = await _mediator.Send(new EditWordCommand() { Word = word });
+            await _mediator.Send(new EditWordCommand() { Word = word });
             return NoContent();
         }
     }
@@ -109,7 +109,7 @@ public class WordController : ControllerBase
         var wordFromDB = await _mediator.Send(new GetWordByIdQuery() { WordId = wordId });
         if (wordFromDB.Word == null) return NotFound();
 
-        var response = await _mediator.Send(new DeleteWordCommand() { WordId = wordId });
+        await _mediator.Send(new DeleteWordCommand() { WordId = wordId });
         return NoContent();
     }
 }

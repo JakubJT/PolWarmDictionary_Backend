@@ -5,7 +5,7 @@ using AutoMapper;
 
 namespace ApplicationServices.Domain.UserActions.Handlers;
 
-public class CreateUserHandler : AsyncRequestHandler<CreateUserCommand>
+public class CreateUserHandler : IRequestHandler<CreateUserCommand>
 {
     private readonly UserRepository _userRepository;
     private readonly IMapper _mapper;
@@ -15,7 +15,7 @@ public class CreateUserHandler : AsyncRequestHandler<CreateUserCommand>
         _mapper = mapper;
     }
 
-    protected async override Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var dalUser = _mapper.Map<DAL.Models.User>(request);
         await _userRepository.CreateUser(dalUser);
