@@ -28,9 +28,12 @@ WordController – kontroler do obsługi żądań dotyczących słów ze słowni
   Zwraca listę słów, które stanowią tłumaczenie przekazanego słowa.
   - /word/getwordbyid – endpoint wykorzystywany do pobierania danego słowa z bazy danych przy wykorzystaniu id tego słowa. Jako argument przyjmuje id słowa (int wordId). Zwraca poszukiwane słowo (obiekt Word).
 
-- Endpointy POST:
+- Endpoint POST:
 
   - /word/createword – endpoint służący do utworzenia w bazie danych nowego słowa. Jako argument przyjmuje obiekt Word (Word word).
+
+- Endpoint PUT:
+
   - /word/editword – endpoint służący do modyfikacji w bazie danych danego słowa. Jako argument przyjmuje obiekt Word (Word word).
 
 - Endpoint DELETE:
@@ -43,9 +46,12 @@ WordGroupController – kontroler do obsługi żądań dotyczących grup słów 
   - /wordgroup/getallwordgroups – endpoint zwraca wszystkie grupy słów (listę obiektów WordGroup) utworzone przez użytkownika, który wysłał zapytanie. Informacje o użytkowniku pozyskiwane są przy pomocy zaimplementowanej w programie autentykacji/autoryzacji.
   - /wordgroup/getwordgroup – endpoint służący do pobierania określonej grupy słów. Jako argument wykorzystywane jest id grupy (int wordGroupId).
 
-- Endpointy POST:
+- Endpoint POST:
 
   - /wordgroup/createwordgroup – endpoint służący do utworzenia w bazie danych nowej grupy słów. Jako argument przyjmuje grupę słów (WordGroup wordGroup).
+  
+- Endpoint PUT:
+
   - /wordgroup/editwordgroup – endpoint służący do edytowania w bazie danych grupy słów. Jako argument przyjmuje grupę słów (WordGroup wordGroup).
     
 - Endpoint DELETE:
@@ -86,10 +92,13 @@ WordController – a controller for handling requests concerning words in dictio
    Returns a list of words that are translations of the given word.
    - /word/getwordbyid – endpoint used to retrieve a given word from the database using a word id. It takes a word id (int wordId) as an argument. Returns the searched word (Word object).
 
-- POST endpoints:
+- Endpoint POST:
 
-   - /word/createword – endpoint for creating a new word in the database. It takes a Word object as an argument.
-   - /word/editword – endpoint for modifying a given word in the database. It takes a Word object as an argument.
+  - /word/createword – endpoint for creating a new word in the database. It takes a Word object as an argument.
+   
+- Endpoint PUT:
+
+  - /word/editword – endpoint for modifying a given word in the database. It takes a Word object as an argument.
 
 - Endpoint DELETE:
 
@@ -101,9 +110,12 @@ WordGroupController – a controller for handling requests concnerning word grou
    - /wordgroup/getallwordgroups – endpoint returns all word groups (a list of WordGroup objects) created by a requesting user. Information about the user is obtained using the authentication/authorization implemented in the program.
    - /wordgroup/getwordgroup – endpoint for retrieving a specific group of words. A group id (int wordGroupId) is used as an argument.
 
-- POST endpoints:
+- Endpoint POST:
 
    - /wordgroup/createwordgroup – endpoint for creating a new group of words in the database. It takes a group of words as an argument (WordGroup wordGroup).
+  
+- Endpoint PUT:
+
    - /wordgroup/editwordgroup – endpoint for editing a group of words in the database. It takes a group of words as an argument (WordGroup wordGroup).
     
 - Endpoint DELETE:

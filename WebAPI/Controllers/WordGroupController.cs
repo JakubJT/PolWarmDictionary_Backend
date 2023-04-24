@@ -82,7 +82,7 @@ public class WordGroupController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost]
+    [HttpPut]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

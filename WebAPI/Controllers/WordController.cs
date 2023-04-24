@@ -75,7 +75,7 @@ public class WordController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPut]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
